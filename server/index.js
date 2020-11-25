@@ -70,10 +70,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/product', require('./routes/product'));
 app.use('/api/chat', require('./routes/chat'));
 
-io.configure(function () {
-	io.set('transports', ['xhr-polling']);
-	io.set('polling duration', 10);
-});
+
 io.on('connection', (socket) => {
 	socket.on('Input Chat Message', (msg) => {
 		connect.then((db) => {
