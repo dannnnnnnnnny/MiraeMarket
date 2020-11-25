@@ -98,7 +98,7 @@ app.use('/uploads', express.static('uploads'));
 
 // 배포를 위한 설정
 if(process.env.NODE_ENV === "production") {
-	app.use(static("client/build")); // static 파일 처리 주소
+	app.use(express.static("client/build")); // static 파일 처리 주소
 	app.get("*", (req, res) => {
 		res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));	// 모든 경로를 위한 client index.html 경로 지정
 	});
