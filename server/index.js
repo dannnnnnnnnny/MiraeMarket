@@ -106,6 +106,6 @@ if(process.env.NODE_ENV === "production") {
 
 
 
-server.listen(5000, () => {
+server.listen(process.env.PORT || 5000, () => {
 	console.log(`서버 5000번 포트 이용 중`);
 });
