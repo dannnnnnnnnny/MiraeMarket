@@ -1,0 +1,13 @@
+.box {
+	/* width: 300px; */
+	/* margin: 50px auto; */
+	border-radius: 10px;
+	background: hsl(213, 93%, 89%);
+	padding: 10px;
+	text-align: right;
+	font-weight: 300;
+	font-size: 10pt;
+	color: #000000;
+	font-family: arial;
+	/* position: relative; */
+}

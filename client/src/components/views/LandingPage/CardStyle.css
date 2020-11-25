@@ -1,0 +1,14 @@
+.ant-card-cover {
+  min-height: 200px;
+}
+
+.ant-card-body {
+  border-radius: 0;
+  font-weight: 400;
+}
+
+.ant-card,
+.ant-card-hoverable {
+  width: 210px;
+  height: 350px;
+}
