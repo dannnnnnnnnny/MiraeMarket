@@ -46,7 +46,10 @@ app.use(passport.initialize()); // passport 구동
 
 app.use(
 	cors({
-		origin: 'http://localhost:3000', // allow to server to accept request from different origin
+		origin: [
+			'http://localhost:3000',
+			'https://mirae-market.herokuapp.com',
+		], // allow to server to accept request from different origin
 		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 		credentials: true, // allow session cookie from browser to pass through
 	}),
@@ -67,6 +70,10 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/product', require('./routes/product'));
 app.use('/api/chat', require('./routes/chat'));
 
+io.configure(function () {
+	io.set('transports', ['xhr-polling']);
+	io.set('polling duration', 10);
+});
 io.on('connection', (socket) => {
 	socket.on('Input Chat Message', (msg) => {
 		connect.then((db) => {

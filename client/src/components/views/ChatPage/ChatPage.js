@@ -14,7 +14,7 @@ export function ChatPage() {
 	const history = useHistory();
 
 	let server = 'http://localhost:5000';
-	const socket = io(server);
+	const socket = io(window.location.hostname);
 
 	const user = useSelector((state) => state.user);
 	const chats = useSelector((state) => state.chat.chats);
