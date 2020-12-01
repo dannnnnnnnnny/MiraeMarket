@@ -5,9 +5,8 @@ import { Menu, Badge } from 'antd';
 import { logoutUser } from '../../../../_actions/user_actions';
 // import { USER_SERVER } from '../../../Config';
 import { withRouter, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { useSelector, useDispatch } from 'react-redux';
+
 function RightMenu(props) {
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
@@ -25,11 +24,11 @@ function RightMenu(props) {
 	if (user.userData && !user.userData.isAuth) {
 		return (
 			<Menu mode={props.mode}>
-				<Menu.Item key="mail">
-					<Link to="/login">Signin</Link>
+				<Menu.Item key="login">
+					<Link to="/login">로그인</Link>
 				</Menu.Item>
-				<Menu.Item key="app">
-					<Link to="/register">Signup</Link>
+				<Menu.Item key="register">
+					<Link to="/register">회원가입</Link>
 				</Menu.Item>
 			</Menu>
 		);
@@ -37,7 +36,7 @@ function RightMenu(props) {
 		return (
 			<Menu mode={props.mode}>
 				<Menu.Item key="upload">
-					<Link to="/upload">Upload</Link>
+					<Link to="/upload">업로드</Link>
 				</Menu.Item>
 				<Menu.Item key="cart">
 					<Badge count={5}>
@@ -45,12 +44,12 @@ function RightMenu(props) {
 							to="/user/cart"
 							style={{ marginRight: -22, color: '#667777' }}
 						>
-							<ShoppingCartOutlined style={{ fontSize: 30 }} />
+							찜 목록
 						</Link>
 					</Badge>
 				</Menu.Item>
 				<Menu.Item key="logout">
-					<a onClick={(e) => logoutHandler(e)}>Logout</a>
+					<a onClick={(e) => logoutHandler(e)}>로그아웃</a>
 				</Menu.Item>
 			</Menu>
 		);

@@ -25,9 +25,9 @@ function NavBar() {
 		>
 			<div className="menu__logo">
 				<Link to="/">
-					로고
-					{/* <img src="dongyang.png" alt="dongyang" style={{ width: '50px' }} />
-					<span className="menu__logo__span" style={{ fontFamily: 'Noto Sans KR, sans-serif'}}>미래장터</span> */}
+					{/* 미래장터로고 */}
+					<img src="dongyang.png" alt="dongyang" style={{ width: '130px' }} />
+					{/* <span className="menu__logo__span" style={{ fontFamily: 'Noto Sans KR, sans-serif'}}>미래장터</span> */}
 				</Link>
 			</div>
 			<div className="menu__container" style={{ marginTop: '15px' }}>
@@ -45,10 +45,10 @@ function NavBar() {
 					<AlignRightOutlined />
 				</Button>
 				<Drawer
-					title="Basic Drawer"
-					placement="right"
+					title="간편 메뉴"
+					placement="left"
 					className="menu_drawer"
-					closable={false}
+					closable={true}
 					onClose={onClose}
 					visible={visible}
 				>

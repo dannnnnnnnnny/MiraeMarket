@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const { Product } = require('../models/Product');
 const { isLoggedIn } = require('./middlewares');
+const fs = require('fs');
 
 //=================================
 //             Product
@@ -108,23 +109,25 @@ router.post('/products', (req, res) => {
 
 router.get('/products_by_id', (req, res) => {
 	//productId를 이용하여 정보 가져오기
-	let type = req.query.type;
+	// let type = req.query.type;
 	let productIds = req.query.id;
 
-	if (type == 'array') {
-		// id=123214124,132142121,12123213 를
-		//  productIds = ['12321421','1521213124','15125125']
-		// 이런식으로 바꿔줘야 함.
-		let ids = req.query.id.split(',');
-		productIds = ids.map((item) => {
-			return item;
-		});
-	}
+	// if (type == 'array') {
+	// 	// id=123214124,132142121,12123213 를
+	// 	//  productIds = ['12321421','1521213124','15125125']
+	// 	// 이런식으로 바꿔줘야 함.
+	// 	let ids = req.query.id.split(',');
+	// 	productIds = ids.map((item) => {
+	// 		return item;
+	// 	});
+	// }
 
-	Product.find({ _id: { $in: productIds } })
+	Product.findById(productIds)
 		.populate('writer')
 		.exec((err, product) => {
 			if (err) res.status(400).send(err);
+			product.views++;
+			product.save();
 			return res.status(200).send(product);
 		});
 });
@@ -138,9 +141,17 @@ router.put('/products_by_id', (req, res) => {
 
 router.delete('/products_by_id', (req, res) => {
 
-	Product.remove({ _id: req.query.id })
-		.exec((err, result) => {
+	Product.findByIdAndRemove({ _id: req.query.id })
+		.exec((err, product) => {
 			if (err) res.status(500).send({ success: false, err});
+			
+			product.image.forEach(image => {
+				fs.unlink(image, (err) => {
+					if(err)
+						console.error(err)
+				})
+			})
+
 			return res.status(200).send({ success: true });
 		});
 		

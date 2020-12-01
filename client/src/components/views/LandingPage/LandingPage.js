@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Col, Card, Row, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Col, Card, Row, Button, Space, Spin, Typography } from 'antd';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import ImageSlider from '../../utils/ImageSlider';
-import './CardStyle.css';
 import CheckCategory from './Sections/CheckCategory';
 import Price from './Sections/Price';
 import SearchBook from './Sections/SearchBook';
-import { continents, price } from './Sections/Datas';
+import BestSeller from './Sections/BestSeller';
 import './LandingPage.css';
+import './CardStyle.css';
+
+const { Title } = Typography;
 
 function LandingPage() {
 	const [Products, setProducts] = useState([]);
@@ -20,7 +22,10 @@ function LandingPage() {
 		category: [],
 		price: [],
 	});
-	// const [SearchTerm, setSearchTerm] = useState('');
+	const location = useLocation();
+	const history = useHistory();
+	// let server = 'http://localhost:5000';
+	// const socket = io(server);
 
 	useEffect(() => {
 		let body = {
@@ -31,6 +36,19 @@ function LandingPage() {
 		getProducts(body);
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+	useEffect(() => {
+		
+		if (location.hash !== '') {
+			setTimeout(() => {
+				const id = location.hash.replace('#', '');
+				const element = document.getElementById(id);
+				if (element) {
+					history.push('/');
+					element.scrollIntoView({ behavior: 'smooth' });
+				}
+			}, 0);
+		}
+	});
 	const getProducts = (body) => {
 		axios.post('/api/product/products', body).then((response) => {
 			if (response.data.success) {
@@ -103,6 +121,21 @@ function LandingPage() {
 		getProducts(body);
 	};
 
+	const renderLoading = () => {
+		return (
+			<Space size="middle">
+				<Spin size="small" />
+				<Spin />
+				<Spin size="large" />
+			</Space>
+		);
+	};
+
+	const onClickSearch = (e) => {
+		// e.preventDefault();
+		history.push('/#BookLists');
+	};
+
 	const renderCards = Products.map((product, index) => {
 		return (
 			<Col lg={6} md={8} sm={12} xs={24} key={index}>
@@ -125,7 +158,7 @@ function LandingPage() {
 						description={
 							<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 								<span>{product.price} 원</span>
-								<span>{product.writer.name}</span>
+								{/* <span>{product.writer.name}</span> */}
 							</div>
 						}
 					/>
@@ -142,29 +175,61 @@ function LandingPage() {
 				height: '100%',
 			}}
 		>
-			<Price
-				list={price}
-				handleFilters={(filters) => handleFilters(filters, 'price')}
-			/>
-
-			<div style={{ height: '20px' }}></div>
-
-			<Row gutter={[16, 16]}>
-				<Col lg={12} xs={24}>
-					{/* CheckBox */}
+			<div
+				style={{
+					marginLeft: '-20%',
+					width: '140%',
+					height: '700px',
+					backgroundImage: 'url(bg3.jpg)',
+					backgroundSize: 'cover',
+					// backgroundRepeat: 'no-repeat',
+					opacity: 0.9,
+				}}
+			>
+				<div style={{ height: '100px' }}></div>
+				<SearchBook refreshFunction={updateSearchTerm} />
+				<div
+					style={{
+						display: 'flex',
+						marginLeft: '21%',
+						width: '70%',
+						paddingTop: '5%',
+						// justifyContent: 'space-between',
+					}}
+				>
 					<CheckCategory
-						list={continents}
 						handleFilters={(filters) => handleFilters(filters, 'category')}
 					/>
-				</Col>
-				<Col lg={12} xs={24}>
-					<SearchBook refreshFunction={updateSearchTerm} />
-				</Col>
+					<Price handleFilters={(filters) => handleFilters(filters, 'price')} />
+				</div>
+				<div style={{ height: '80px' }}></div>
+				<div>
+					<Button
+						size="large"
+						style={{ marginLeft: '45%', width: '150px' }}
+						shape="round"
+						type="danger"
+						onClick={(e) => onClickSearch(e)}
+					>
+						검색
+					</Button>
+
+				</div>
+			</div>
+			<div style={{ height: '30px' }}></div>
+
+			{/* BestSeller */}
+			<BestSeller />
+
+			<div style={{ height: '90px' }}></div>
+			<Title style={{ textAlign: 'center' }} level={2}>
+				중고 서적 리스트
+			</Title>
+			<br />
+			<Row id="BookLists" gutter={[16, 16]}>
+				{!Products && renderLoading}
+				{Products && renderCards}
 			</Row>
-
-			<div style={{ height: '130px' }}></div>
-
-			<Row gutter={[16, 16]}>{Products && renderCards}</Row>
 
 			{PostSize >= Limit && (
 				<div

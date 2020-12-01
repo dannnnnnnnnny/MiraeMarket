@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, Button, Row, Col } from 'antd';
 import io from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
+// import moment from 'moment';
 import { getChats, afterPostMessage } from '../../../_actions/chat_actions';
 import ChatCard from './Sections/ChatCard';
 import { useHistory } from 'react-router-dom';
@@ -13,8 +13,9 @@ export function ChatPage() {
 	const messagesEndLine = useRef(null);
 	const history = useHistory();
 
-	let server = 'http://localhost:5000';
-	const socket = io(window.location.hostname);
+	// let server = 'http://localhost:5000';
+	let server = window.location.hostname;
+	const socket = io(server);
 
 	const user = useSelector((state) => state.user);
 	const chats = useSelector((state) => state.chat.chats);
@@ -56,17 +57,17 @@ export function ChatPage() {
 		}
 
 		let userId = user.userData._id;
-		let userName = user.userData.name;
+		// let userName = user.userData.name;
 		let userImage = user.userData.image;
-		let nowTime = moment();
+		// let nowTime = moment();
 		let type = 'Text';
 
 		socket.emit('Input Chat Message', {
 			chatMessage,
 			userId,
-			userName,
+			// userName,
 			userImage,
-			nowTime,
+			// nowTime,
 			type,
 		});
 

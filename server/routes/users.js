@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const { User } = require('../models/User');
 const passport = require('passport');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
@@ -22,6 +23,50 @@ router.get('/auth', isLoggedIn, (req, res) => {
 		image: req.user.image,
 		cart: req.user.cart,
 		history: req.user.history,
+	});
+});
+
+// Email 중복 체크
+router.get('/', isNotLoggedIn, (req, res) => {
+
+	User.findOne({ email: req.query.email }, (err, userInfo) => {
+		if (err) {
+			return res.status(500).json({ success: false, err })
+		}
+		if (userInfo === null) {
+			return res.status(200).json({ success: true })	
+		} else {
+			return res.status(200).json({
+				success: false,
+			});
+		}
+	})
+});
+
+// npmjs.com/package/multer
+var storage = multer.diskStorage({
+	// 저장 위치
+	destination: function (req, file, cb) {
+		cb(null, 'uploads/avatar/');
+	},
+	// 파일 명
+	filename: function (req, file, cb) {
+		cb(null, `${Date.now()}_${file.originalname}`);
+	},
+});
+var upload = multer({ storage: storage }).single('file');
+
+router.post('/profileImage', isNotLoggedIn, (req, res) => {
+	// 가져온 프로필 저장
+	upload(req, res, (err) => {
+		if (err) {
+			return res.json({ success: false, err });
+		}
+		return res.json({
+			success: true,
+			filePath: res.req.file.path,
+			fileName: res.req.file.filename,
+		});
 	});
 });
 

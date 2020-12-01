@@ -3,7 +3,7 @@ import { Carousel } from 'antd';
 function ImageSlider(props) {
 	return (
 		<div>
-			<Carousel autoplay>
+			<Carousel>
 				{props.images &&
 					props.images.map((image, index) => (
 						<div key={index} style={{

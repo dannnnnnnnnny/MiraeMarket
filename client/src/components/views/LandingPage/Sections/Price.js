@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Input } from 'antd';
+import { Input, Typography } from 'antd';
+
+const { Title } = Typography;
 
 function Price(props) {
 	// const [Value, setValue] = useState([]);
@@ -22,22 +24,32 @@ function Price(props) {
 	};
 
 	return (
-		<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-			<span>
-				<Input
-					onChange={onLowChange}
-					value={lowPrice}
-					placeholder={'최소 가격'}
-				/>
-			</span>
-			<b>&nbsp;&nbsp;~&nbsp;&nbsp;</b>
-			<span>
-				<Input
-					onChange={onHighChange}
-					value={highPrice}
-					placeholder={'최대 가격'}
-				/>
-			</span>
+		<div style={{ width: '50%', marginLeft: '10%' }}>
+			<div style={{ display: 'flex'}} >
+				<span style={{ width: '50%' }}>
+					<Input
+						type='number'
+						size="middle"
+						style={{ width: '60%' }}
+						onChange={onLowChange}
+						value={lowPrice}
+						placeholder={'최소 가격'}
+					/>
+				</span>
+				<Title level={2} style={{ color: 'white', marginLeft: '-75px' }}>
+					~&nbsp;&nbsp;
+				</Title>
+				<span style={{ width: '50%' }}>
+					<Input
+						type='number'
+						size="middle"
+						style={{ width: '60%' }}
+						onChange={onHighChange}
+						value={highPrice}
+						placeholder={'최대 가격'}
+					/>
+				</span>
+			</div>
 		</div>
 	);
 }

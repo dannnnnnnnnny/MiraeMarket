@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
-import { Input } from 'antd';
+import { Input, Typography } from 'antd';
+import "./Box.css";
 
-const { Search } = Input;
+const { Title } = Typography;
 
 function SearchBook(props) {
+	// const history = useHistory();
 	const [SearchTerm, setSearchTerm] = useState('');
 	const searchHandler = (event) => {
-		console.log(event.currentTarget.value);
 		setSearchTerm(event.currentTarget.value);
 		props.refreshFunction(event.currentTarget.value);
 	};
 
 	return (
-		<div>
-			<Search
-				placeholder="Search"
-				onChange={searchHandler}
-				value={SearchTerm}
-				style={{ width: '100%' }}
-			/>
+		<div style={{ marginLeft: '18%', paddingTop: '5%' }}>
+			<Title level={1} style={{ marginLeft: '22%', color: 'white' }}>
+				찾으시는 책이 있으신가요?
+			</Title>
+			<div style={{ display: 'flex' }}>
+				<Input
+					size="large"
+					placeholder="찾으시는 도서명을 검색해보세요"
+					onChange={searchHandler}
+					value={SearchTerm}
+					style={{ width: '80%' }}
+				/>
+			</div>
 		</div>
 	);
 }

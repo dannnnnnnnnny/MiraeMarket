@@ -18,11 +18,7 @@ const userSchema = mongoose.Schema({
 		type: String,
 		minglength: 5,
 	},
-	lastname: {
-		type: String,
-		maxlength: 50,
-	},
-	role: {
+	role: {				// 0: 일반 유저, 1: 관리자
 		type: Number,
 		default: 0,
 	},
@@ -35,12 +31,6 @@ const userSchema = mongoose.Schema({
 		default: [],
 	},
 	image: String,
-	token: {
-		type: String,
-	},
-	tokenExp: {
-		type: Number,
-	},
 	snsId: {
 		type: String,
 	},

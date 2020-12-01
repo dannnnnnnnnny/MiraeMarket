@@ -2,17 +2,20 @@
 
 .menu {
 	/* padding: 0 20px; */
-	border-bottom: solid 0.0001rem #dbdbdb;
-	height: 65px;
+	/* border-bottom: solid 0.0001rem #dbdbdb; */
+	height: 80px;
 	/* overflow: auto; */
-	/* box-shadow: 0 0 30px #f3f1f1; */
+	box-shadow: 0 0 20px #dddddd;
 	background-color: #ffffff;
 	font-weight: 600;
 	opacity: 0.85;
+	border: none;
+	/* font-size: 25px; */
 }
 
 .menu__logo {
 	/* height: 55px; */
+	padding-top: 8px;
 	width: 170px;
 	float: left;
 	font-weight: 700;
@@ -50,10 +53,12 @@
 }
 
 .menu__container .menu_left {
+	margin-top: 5px;
 	float: left;
 }
 
 .menu__container .menu_rigth {
+	margin-top: 5px;
 	float: right;
 }
 

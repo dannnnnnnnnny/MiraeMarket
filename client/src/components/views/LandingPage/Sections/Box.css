@@ -1,3 +1,7 @@
 .ant-collapse-header {
 	width: 150px;
 }
+
+.searchbar {
+	border-radius: 50%;
+}

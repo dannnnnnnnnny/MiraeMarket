@@ -1,202 +1,236 @@
-import React from "react";
-import moment from "moment";
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import React, { useState } from "react";
 import { registerUser } from "../../../_actions/user_actions";
 import { useDispatch } from "react-redux";
-
+import { USER_SERVER } from "../../Config";
+import { Form, Input, Button, Upload} from 'antd';
+import Axios from "axios";
+import { animateClass, animateText, samples } from 'react-punch';
+import { css } from 'emotion';
+import ProfileImageUpload from '../../utils/ProfileImageUpload';
 import {
-  Form,
-  Input,
-  Button,
-} from 'antd';
+	SmileOutlined,
+	FrownOutlined,
+	EditFilled,
+	UserOutlined,
+} from '@ant-design/icons';
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
+
+
 
 function RegisterPage(props) {
   const dispatch = useDispatch();
+  const [formErrorMessage, setFormErrorMessage] = useState('');
+  const [formPasswordErrorMessage, setFormPasswordErrorMessage] = useState('');
+  const [emailStatus, setEmailStatus] = useState(null)
+  const [passwordStatus, setPasswordStatus] = useState(null)
+  const [password, setPassword] = useState('')
+  const [image, setImage] = useState('');
+  
+  const HeaderStyle = `
+    ${css({
+      color: 'skyblue',
+      fontSize: 40,
+      fontWeight: 800,
+      fontFamily: 'Roboto, sans-serif',
+      // paddingLeft: 30,
+      marginTop: '200px',
+    })}
+    ${animateClass()}`
+  ;
+  
+  const onFinish = (values) => {
+
+    const { email, name, password } = values;
+
+    let dataToSubmit = {
+			email: email,
+			name: name,
+			password: password,
+			image: image,
+    };
+    
+		dispatch(registerUser(dataToSubmit)).then((response) => {
+			if (response.payload.success) {
+				props.history.push('/login');
+			} else {
+				alert("회원가입 실패");
+			}
+		});
+  }
+
+  const HandleFinishFailed = (errorInfo) => {
+		console.log('Failed:', errorInfo);
+	};
+
+  const handleEmailBlur = (e) => {
+    setEmailStatus('validating')
+
+    if (new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(e.target.value)) {
+      Axios.get(`${USER_SERVER}?email=${e.target.value}`).then((response) => {
+				if (response.data.success) {
+					setEmailStatus('success');
+					setFormErrorMessage('');
+				} else {
+					setEmailStatus('error');
+					setFormErrorMessage('이미 존재하는 이메일 입니다.');
+				}
+			});
+    } else {
+      setEmailStatus('error');
+      setFormErrorMessage('잘못된 이메일 형식입니다.')
+    }
+    
+  }
+
+  const passwordChange = (e) => {
+    setPassword(e.target.value);
+  }
+
+  const handlePasswordBlur = (e) => {
+    setPasswordStatus('validating')
+
+    if (password === e.target.value) {
+      setPasswordStatus('success')
+      setFormPasswordErrorMessage('')
+    } else {
+      setPasswordStatus('error')
+      setFormPasswordErrorMessage('비밀번호가 다릅니다. 확인해주세요.')
+    }
+
+  }
+
+  const updateImages = (newImage) => {
+		setImage(newImage);
+	};
+
   return (
+		<div className="app">
+			<div style={{ display: 'flex', marginTop: '-10%' }}>
+				<h1 className={HeaderStyle}>Register</h1>
+			</div>
+			<div
+				style={{
+					display: 'flex',
+          width: '350px',
+          height: '100px',
+					justifyContent: 'space-between',
+				}}
+			>
+				<div style={{ marginTop: '10%' }}>
+					<label>프로필 이미지</label>
+				</div>
+				<div>
+					<ProfileImageUpload refreshFunction={updateImages} />
+				</div>
+			</div>
+			<br />
+			<Form
+				layout={'horizontal'}
+				onFinish={onFinish}
+				onFinishFailed={HandleFinishFailed}
+				// validateMessages={validateMessages}
+				scrollToFirstError={true}
+				style={{ width: '350px', height: '300px' }}
+			>
+				<Form.Item
+					// required
+					name="email"
+					hasFeedback
+					validateStatus={emailStatus}
+					rules={[{ required: true, message: 'E-mail을 입력해주세요.' }]}
+				>
+					<Input
+						// id="email"
+						prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+						placeholder="이메일"
+						onBlur={handleEmailBlur}
+					/>
+				</Form.Item>
+				{formErrorMessage && (
+					<label>
+						<p
+							style={{
+								color: '#ff0000bf',
+								marginTop: '-5%',
+								fontSize: '0.7rem',
+								border: '0.5px solid',
+								// height: '10px',
+								padding: '3px',
+								borderRadius: '10px',
+							}}
+						>
+							{formErrorMessage}
+						</p>
+					</label>
+				)}
 
-    <Formik
-      initialValues={{
-        email: '',
-        lastName: '',
-        name: '',
-        password: '',
-        confirmPassword: ''
-      }}
-      validationSchema={Yup.object().shape({
-        name: Yup.string()
-          .required('Name is required'),
-        lastName: Yup.string()
-          .required('Last Name is required'),
-        email: Yup.string()
-          .email('Email is invalid')
-          .required('Email is required'),
-        password: Yup.string()
-          .min(6, 'Password must be at least 6 characters')
-          .required('Password is required'),
-        confirmPassword: Yup.string()
-          .oneOf([Yup.ref('password'), null], 'Passwords must match')
-          .required('Confirm Password is required')
-      })}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
+				<Form.Item
+					name="name"
+					rules={[{ required: true, message: '닉네임을 입력해주세요' }]}
+				>
+					<Input
+						prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+						placeholder="닉네임"
+					/>
+				</Form.Item>
 
-          let dataToSubmit = {
-            email: values.email,
-            password: values.password,
-            name: values.name,
-            lastname: values.lastname,
-            image: `http://gravatar.com/avatar/${moment().unix()}?d=identicon`
-          };
+				<Form.Item
+					name="password"
+					hasFeedback
+					validateStatus={passwordStatus}
+					rules={[{ required: true, message: '패스워드를 입력해주세요.' }]}
+				>
+					<Input.Password
+						prefix={<EditFilled style={{ color: 'rgba(0,0,0,.25)' }} />}
+						placeholder="패스워드"
+						onChange={passwordChange}
+						value={password}
+					/>
+				</Form.Item>
 
-          dispatch(registerUser(dataToSubmit)).then(response => {
-            if (response.payload.success) {
-              props.history.push("/login");
-            } else {
-              alert(response.payload.err.errmsg)
-            }
-          })
+				<Form.Item
+					name="confirm_password"
+					hasFeedback
+					validateStatus={passwordStatus}
+					rules={[{ required: true, message: '패스워드 확인이 필요합니다.' }]}
+				>
+					<Input.Password
+						prefix={<EditFilled style={{ color: 'rgba(0,0,0,.25)' }} />}
+						placeholder="패스워드 확인"
+						onBlur={handlePasswordBlur}
+					/>
+				</Form.Item>
+				{formPasswordErrorMessage && (
+					<label>
+						<p
+							style={{
+								color: '#ff0000bf',
+								// marginTop: '-5%',
+								fontSize: '0.7rem',
+								border: '0.5px solid',
+								// height: '10px',
+								padding: '3px',
+								borderRadius: '10px',
+							}}
+						>
+							{formPasswordErrorMessage}
+						</p>
+					</label>
+				)}
 
-          setSubmitting(false);
-        }, 500);
-      }}
-    >
-      {props => {
-        const {
-          values,
-          touched,
-          errors,
-          // dirty,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          // handleReset,
-        } = props;
-        return (
-          <div className="app">
-            <h2>Sign up</h2>
-            <Form style={{ minWidth: '375px' }} {...formItemLayout} onSubmit={handleSubmit} >
-
-              <Form.Item required label="Name">
-                <Input
-                  id="name"
-                  placeholder="Enter your name"
-                  type="text"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={
-                    errors.name && touched.name ? 'text-input error' : 'text-input'
-                  }
-                />
-                {errors.name && touched.name && (
-                  <div className="input-feedback">{errors.name}</div>
-                )}
-              </Form.Item>
-
-              <Form.Item required label="Last Name">
-                <Input
-                  id="lastName"
-                  placeholder="Enter your Last Name"
-                  type="text"
-                  value={values.lastName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={
-                    errors.lastName && touched.lastName ? 'text-input error' : 'text-input'
-                  }
-                />
-                {errors.lastName && touched.lastName && (
-                  <div className="input-feedback">{errors.lastName}</div>
-                )}
-              </Form.Item>
-
-              <Form.Item required label="Email" hasFeedback validateStatus={errors.email && touched.email ? "error" : 'success'}>
-                <Input
-                  id="email"
-                  placeholder="Enter your Email"
-                  type="email"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={
-                    errors.email && touched.email ? 'text-input error' : 'text-input'
-                  }
-                />
-                {errors.email && touched.email && (
-                  <div className="input-feedback">{errors.email}</div>
-                )}
-              </Form.Item>
-
-              <Form.Item required label="Password" hasFeedback validateStatus={errors.password && touched.password ? "error" : 'success'}>
-                <Input
-                  id="password"
-                  placeholder="Enter your password"
-                  type="password"
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={
-                    errors.password && touched.password ? 'text-input error' : 'text-input'
-                  }
-                />
-                {errors.password && touched.password && (
-                  <div className="input-feedback">{errors.password}</div>
-                )}
-              </Form.Item>
-
-              <Form.Item required label="Confirm" hasFeedback>
-                <Input
-                  id="confirmPassword"
-                  placeholder="Enter your confirmPassword"
-                  type="password"
-                  value={values.confirmPassword}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={
-                    errors.confirmPassword && touched.confirmPassword ? 'text-input error' : 'text-input'
-                  }
-                />
-                {errors.confirmPassword && touched.confirmPassword && (
-                  <div className="input-feedback">{errors.confirmPassword}</div>
-                )}
-              </Form.Item>
-
-              <Form.Item {...tailFormItemLayout}>
-                <Button onClick={handleSubmit} type="primary" disabled={isSubmitting}>
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        );
-      }}
-    </Formik>
-  );
+				<Form.Item>
+					<Button
+						type="primary"
+						htmlType="submit"
+						className="register-form-button"
+						style={{ minWidth: '100%' }}
+					>
+						회원가입
+					</Button>
+				</Form.Item>
+			</Form>
+		</div>
+	);
 };
 
 

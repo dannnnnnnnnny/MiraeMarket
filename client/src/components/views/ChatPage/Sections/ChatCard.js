@@ -25,12 +25,12 @@ function ChatCard(props) {
 				<Comment
 					author={
 						props.chat.sender && (
-							<p style={{ color: 'white' }}>{props.chat.sender.name}</p>
+							<p>{props.chat.sender.name}</p>
 						)
 					}
 					avatar={
 						<Avatar
-							src={props.chat.sender && props.chat.sender.image}
+							src={props.chat.sender && `http://localhost:5000/${props.chat.sender.image}`}
 							alt={props.chat.sender && props.chat.sender.name}
 						/>
 					}

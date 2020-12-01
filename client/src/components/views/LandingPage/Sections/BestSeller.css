@@ -1,0 +1,28 @@
+.image-item  {
+    max-width: 490px;
+    height: 290px;
+}
+
+.react-multi-carousel-track  {
+    margin-left: 84px;
+    /* padding-top: ; */
+}
+
+.line {
+    margin-top: 40px;
+    border-bottom: thick double #6d6d6d;
+    /* border-top-width: 0px; */
+    text-align:center;
+    animation: line_animation 2s linear forwards;
+}
+
+@keyframes line_animation {
+    from {
+    left:50%;
+    width:0%;
+  }
+  to {
+    left:0%;
+    width:100%;
+  }
+}

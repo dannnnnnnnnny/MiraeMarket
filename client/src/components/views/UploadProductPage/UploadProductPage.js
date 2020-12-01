@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Typography, Button, Form, Input } from 'antd';
 import FileUpload from "../../utils/FileUpload";
 import Axios from 'axios';
-
+// import io from 'socket.io-client';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -17,7 +17,9 @@ function UploadProductPage(props) {
     const [price, setPrice] = useState(0)
     const [category, setCategory] = useState('전공')
     const [images, setImages] = useState([])
-    
+
+    // let server = 'http://localhost:5000';
+    // const socket = io(server);
 
     const titleChangeHandler = (e) => {
         setTitle(e.currentTarget.value)
@@ -32,7 +34,7 @@ function UploadProductPage(props) {
     }
 
     const categoryChangeHandler = (e) => {
-        console.log(e.currentTarget.value);
+        // console.log(e.currentTarget.value);
         setCategory(e.currentTarget.value)
     }
 
@@ -43,7 +45,7 @@ function UploadProductPage(props) {
     const submitHandler = (e) => {
         e.preventDefault();
 
-        console.log(title, describtion, price, category, images)
+        // console.log(title, describtion, price, category, images)
         if (!title || !describtion || !price || !category || !images ) {
             return alert('모든 값을 채워주세요.')
         }
@@ -61,6 +63,9 @@ function UploadProductPage(props) {
         Axios.post('/api/product', body)
             .then(response => {
                 if (response.data.success) {
+                    // socket.emit('Upload Post', {
+                    //     type: 'post',
+                    // });
                     alert('업로드 성공')
                     props.history.push('/')
                 } else {

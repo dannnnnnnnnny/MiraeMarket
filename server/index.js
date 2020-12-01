@@ -69,7 +69,8 @@ app.use(function (req, res, next) {
 app.use('/api/users', require('./routes/users'));
 app.use('/api/product', require('./routes/product'));
 app.use('/api/chat', require('./routes/chat'));
-
+app.use('/api/bestseller', require('./routes/bestseller'));
+app.use('/api/comment', require('./routes/comment'));
 
 io.on('connection', (socket) => {
 	socket.on('Input Chat Message', (msg) => {
@@ -95,6 +96,10 @@ io.on('connection', (socket) => {
 			}
 		});
 	});
+	// socket.on('Upload Post', (type) => {
+	// 		console.log("Upload Post socket");
+	// 		return io.emit('Get Post Data', { success: true });
+	// });
 });
 
 app.use('/uploads', express.static('uploads'));

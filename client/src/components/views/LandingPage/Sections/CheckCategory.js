@@ -18,12 +18,13 @@ function CheckCategory(props) {
 	}
 
 	return (
-		<div>
+		<div style={{ display: 'flex', width: '35%' }}>
 			<Select
 				mode="multiple"
 				allowClear
+				size='middle'
 				style={{ width: '100%' }}
-				placeholder="Please select"
+				placeholder="원하시는 카테고리를 선택해주세요"
 				defaultValue={[]}
 				onChange={handleChange}
 			>

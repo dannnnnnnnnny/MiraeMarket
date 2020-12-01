@@ -161,7 +161,7 @@ function LoginPage() {
 				onFinish={onFinish}
 				onFinishFailed={HandleFinishFailed}
 				initialValues={{ email: initialEmail }}
-				style={{ width: '350px' }}
+				style={{ width: '350px', height: '260px' }}
 			>
 				<Form.Item
 					// required
@@ -242,7 +242,7 @@ function LoginPage() {
 				</Form.Item>
 			</Form>
 
-			<div style={{ justifyContent: 'space-between', display: 'inline-flex' }}>
+			<div style={{ justifyContent: 'space-between', display: 'flex', width: '120px' }}>
 				<Button
 					onClick={(e) => loginKakao(e)}
 					style={{

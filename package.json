@@ -8,6 +8,7 @@
     "npm": "6.9.0"
   },
   "dependencies": {
+    "antd-img-crop": "^3.13.2",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
