@@ -18,12 +18,23 @@ router.get('/auth', isLoggedIn, (req, res) => {
 		isAuth: true,
 		email: req.user.email,
 		name: req.user.name,
-		lastname: req.user.lastname,
 		role: req.user.role,
 		image: req.user.image,
+		major: req.user.major,
 		cart: req.user.cart,
-		history: req.user.history,
+		phone: req.user.phone,
 	});
+});
+
+router.get('/logout', isLoggedIn, (req, res) => {
+	// console.log(req.user, req.session);
+	req.logout();
+	req.session.destroy();
+	// console.log(req.user, req.session);
+	return res.clearCookie('connect.sid', { path: '/' }).status(200).send({
+		success: true,
+	});
+
 });
 
 // Email 중복 체크
@@ -56,7 +67,7 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage }).single('file');
 
-router.post('/profileImage', isNotLoggedIn, (req, res) => {
+router.post('/profileImage', (req, res) => {
 	// 가져온 프로필 저장
 	upload(req, res, (err) => {
 		if (err) {
@@ -98,20 +109,23 @@ router.post('/login', isNotLoggedIn, function (req, res, next) {
 	})(req, res, next);
 });
 
-router.get('/logout', isLoggedIn, (req, res) => {
-	User.findOneAndUpdate(
-		{ _id: req.user._id },
-		{ token: '', tokenExp: '' },
-		(err, doc) => {
-			if (err) return res.json({ success: false, err });
-			req.logout();
-			req.session.destroy();
-			return res.clearCookie('connect.sid', { path: '/' }).status(200).send({
-				success: true,
-			});
-		},
-	);
-});
+
+
+router.put('/edit', isLoggedIn, (req, res) => {
+	User.findOneAndUpdate({ _id: req.user._id }, { $set: req.body })
+		.exec((err, result) => {
+			// console.log(result)
+			if (err) res.status(500).send({ success: false, err });
+			return res.status(200).send({ success: true });
+		})
+})
+
+// router.get('/profile', isLoggedIn, (req, res) => {
+// 	User.findOne({ _id: req.user._id }, (err, user) => {
+// 		if (err) return res.json({ success: false, err })
+// 		return res.status(200).json({ success: true, user });
+// 	})
+// })
 
 router.get('/kakao', passport.authenticate('kakao'));
 router.get('/facebook', passport.authenticate('facebook'));
@@ -119,22 +133,28 @@ router.get('/naver', passport.authenticate('naver'));
 
 router.get('/kakao/callback', function (req, res, next) {
 	passport.authenticate('kakao', {
-		successRedirect: 'http://localhost:3000',
-		failureRedirect: 'http://localhost:3000/login',
+		// successRedirect: 'http://localhost:3000',
+		// failureRedirect: 'http://localhost:3000/login',
+		successRedirect: 'https://mirae-market.herokuapp.com',
+		failureRedirect: 'https://mirae-market.herokuapp.com/login',
 	})(req, res, next);
 });
 
 router.get('/facebook/callback', function (req, res, next) {
 	passport.authenticate('facebook', {
-		successRedirect: 'http://localhost:3000/login',
-		failureRedirect: 'http://localhost:3000/login',
+		// successRedirect: 'http://localhost:3000/login',
+		// failureRedirect: 'http://localhost:3000/login',
+		successRedirect: 'https://mirae-market.herokuapp.com',
+		failureRedirect: 'https://mirae-market.herokuapp.com/login',
 	})(req, res, next);
 });
 
 router.get('/naver/callback', function (req, res, next) {
 	passport.authenticate('naver', {
-		successRedirect: 'http://localhost:3000/login',
-		failureRedirect: 'http://localhost:3000/login',
+		// successRedirect: 'http://localhost:3000/login',
+		// failureRedirect: 'http://localhost:3000/login',
+		successRedirect: 'https://mirae-market.herokuapp.com',
+		failureRedirect: 'https://mirae-market.herokuapp.com/login',
 	})(req, res, next);
 });
 
@@ -156,39 +176,35 @@ router.get('/login/success', (req, res) => {
 router.post('/addToCart', isLoggedIn, (req, res) => {
 	// 해당 유저 정보 가져오기
 	User.findOne({ _id: req.user._id }, (err, userInfo) => {
+
 		// 카트안에 이미 상품이 있는지 확인
 		let duplicate = false;
 		userInfo.cart.forEach((item) => {
-			if (item.id === req.body.productId) {
+			if (item.id === req.body.bookId) {
 				duplicate = true;
 			}
 		});
 
+		// 판매완료로 변경
+		Product.findOne({ _id: req.body.bookId }, (err, product) => {
+			product.sold = true;
+			product.save();
+		})
+
 		if (duplicate) {
 			// 있다면
-			User.findOneAndUpdate(
-				{ _id: req.user._id, 'cart.id': req.body.productId },
-				{ $inc: { 'cart.$.quantity': 1 } },
-				{ new: true }, // Update된 정보를 받음
-				(err, userInfo) => {
-					if (err) return res.status(200).json({ success: false, err });
-					return res.status(200).send(userInfo.cart);
-				},
-			);
+			return res.status(200).send(userInfo.cart);
+
 		} else {
 			// 있지 않다면
 			User.findOneAndUpdate(
 				{ _id: req.user._id },
 				{
 					$push: {
-						cart: {
-							id: req.body.productId,
-							quantity: 1,
-							date: Date.now(),
-						},
+						cart: { id: req.body.bookId },
 					},
 				},
-				{ new: true },
+				{ new: true }, // Update된 정보를 받음
 				(err, userInfo) => {
 					if (err) return res.status(400).json({ success: false, err });
 					return res.status(200).send(userInfo.cart);
@@ -224,5 +240,14 @@ router.get('/removeFromCart', isLoggedIn, (req, res) => {
 		},
 	);
 });
+
+router.get('/userInfo', (req, res) => {
+	User.findOne({ _id: req.query.id})
+		.exec((err, user) => {
+			// console.log("user : ", user)
+			if(err) return res.send({ success: false, err })
+			return res.send({ success: true, user })
+		})
+})
 
 module.exports = router;

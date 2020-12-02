@@ -6,17 +6,21 @@ function ImageSlider(props) {
 			<Carousel>
 				{props.images &&
 					props.images.map((image, index) => (
-						<div key={index} style={{
-							width: '210px',
-							height: '270px'
-						}}>
+						<div
+							key={index}
+							style={{
+								width: '210px',
+								height: '270px',
+							}}
+						>
 							<img
 								style={{
 									width: '210px',
 									height: '270px',
 									objectFit: 'cover',
 								}}
-								src={`http://localhost:5000/${image}`}
+								// src={`http://localhost:5000/${image}`}
+								src={`https://mirae-market.herokuapp.com/${image}`}
 								alt={`product_${image}`}
 							/>
 						</div>

@@ -32,9 +32,6 @@ export async function loginUser(dataToSubmit) {
 }
 
 export function socialUser(dataToSubmit) {
-	// const request = axios
-	// 	.post(`${USER_SERVER}/login`, dataToSubmit)
-	// 	.then((response) => response.data);
 	const { _id } = dataToSubmit;
 
 	return {
@@ -56,7 +53,8 @@ export function auth() {
 
 export function logoutUser() {
 	const request = axios
-		.get(`${USER_SERVER}/logout`)
+		// .get(`http://localhost:3000/api/users/logout`)
+		.get(`https://mirae-market.herokuapp.com/api/users/logout`)
 		.then((response) => response.data);
 
 	return {
@@ -65,9 +63,9 @@ export function logoutUser() {
 	};
 }
 
-export function addToCart(id) {
+export function addToCart(bookId) {
 	let body = {
-		productId: id,
+		bookId: bookId,
 	};
 	const request = axios
 		.post(`${USER_SERVER}/addToCart`, body)
@@ -79,23 +77,11 @@ export function addToCart(id) {
 	};
 }
 
-export function getCartItems(cartItems, userCart) {
+export function getCartItems(cartItems) {
 	const request = axios
-		.get(`/api/product/products_by_id?id=${cartItems}&type=array`)
-		.then((response) => {
-			console.log('response : ', response);
-			// CartItems들에 해당하는 정보들 Product Collections에서 가져온 후
-			// Quantity 정보를 넣어줌
-			userCart.forEach((cartItem) => {
-				response.data.forEach((productDetail, index) => {
-					if (cartItem.id === productDetail._id) {
-						response.data[index].quantity = cartItem.quantity;
-					}
-				});
-			});
+		.get(`/api/product/bookcart?id=${cartItems}`)
+		.then((response) => response.data);
 
-			return response.data;
-		});
 
 	return {
 		type: GET_CART_ITEMS,
@@ -103,11 +89,12 @@ export function getCartItems(cartItems, userCart) {
 	};
 }
 
-export function removeCartItem(productId) {
+export function removeCartItem(bookId) {
 	const request = axios
-		.get(`/api/users/removeFromCart?id=${productId}`)
+		.get(`/api/users/removeFromCart?id=${bookId}`)
 		.then((response) => {
 			//productInfo ,  cart 정보를 조합해서   CartDetail을 만든다.
+			console.log("remove : ", response.data)
 			response.data.cart.forEach((item) => {
 				response.data.productInfo.forEach((product, index) => {
 					if (item.id === product._id) {

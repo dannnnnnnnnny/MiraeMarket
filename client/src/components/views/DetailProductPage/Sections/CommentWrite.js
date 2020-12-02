@@ -40,7 +40,7 @@ function CommentWrite(props) {
 			.then(
 				(response) => {
 					if (response.data.success) {
-						console.log(response.data);
+						// console.log(response.data);
 						props.refresh()
 						openNotificationWithIcon(
 							'success',

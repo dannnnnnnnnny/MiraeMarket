@@ -58,17 +58,20 @@ function LoginPage() {
 
 	const loginKakao = (e) => {
 		e.preventDefault();
-		window.open('http://localhost:5000/api/users/kakao', '_self');
+		// window.open('http://localhost:5000/api/users/kakao', '_self');
+		window.open('https://mirae-market.herokuapp.com/api/users/kakao', '_self');
 	};
 
 	const loginFacebook = (e) => {
 		e.preventDefault();
-		window.open('http://localhost:5000/api/users/facebook', '_self');
+		// window.open('http://localhost:5000/api/users/facebook', '_self');
+		window.open('https://mirae-market.herokuapp.com/api/users/facebook', '_self');
 	};
 
 	const loginNaver = (e) => {
 		e.preventDefault();
-		window.open('http://localhost:5000/api/users/naver', '_self');
+		// window.open('http://localhost:5000/api/users/naver', '_self');
+		window.open('https://mirae-market.herokuapp.com/api/users/naver', '_self');
 	};
 
 	const handleRememberMe = () => {
@@ -97,6 +100,7 @@ function LoginPage() {
 					notification.open({
 						message: '로그인 성공',
 						icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+						duration: 2.
 					});
 					history.push(location.state === undefined ? '/' : location.state);
 				} else {
@@ -104,6 +108,7 @@ function LoginPage() {
 					notification.open({
 						message: '로그인 실패',
 						icon: <FrownOutlined style={{ color: '#ff3333' }} />,
+						duration: 2
 					});
 				}
 			})
@@ -149,11 +154,21 @@ function LoginPage() {
 	`;
 
 	return (
-		<div className="app">
+		<div
+			style={{
+				// flexDirection: 'column',
+				display: 'block',
+				margin: '0 auto',
+				justifyContent: 'center',
+				alignItems: 'center',
+				width: '300px',
+				height: '600px',
+			}}
+		>
 			{/* <b style={{ fontSize: '20px', color: '#428bca' }}>
 				{animateText('Login Page', samples.entrance.slide())}
 			</b> */}
-			<div style={{ display: 'flex' }}>
+			<div style={{ display: 'flex', justifyContent: 'center' }}>
 				<h1 className={HeaderStyle}>{LeftAnimateHeader('Login', 1000)}</h1>
 				<h1 className={HeaderStyle}>{RightAnimateHeader('Page', 1000)}</h1>
 			</div>
@@ -161,7 +176,6 @@ function LoginPage() {
 				onFinish={onFinish}
 				onFinishFailed={HandleFinishFailed}
 				initialValues={{ email: initialEmail }}
-				style={{ width: '350px', height: '260px' }}
 			>
 				<Form.Item
 					// required
@@ -174,7 +188,7 @@ function LoginPage() {
 					<Input
 						// id="email"
 						prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-						placeholder="Enter your email"
+						placeholder="email"
 					/>
 				</Form.Item>
 
@@ -184,7 +198,7 @@ function LoginPage() {
 				>
 					<Input.Password
 						prefix={<EditFilled style={{ color: 'rgba(0,0,0,.25)' }} />}
-						placeholder="Enter your password"
+						placeholder="password"
 					/>
 				</Form.Item>
 
@@ -242,7 +256,14 @@ function LoginPage() {
 				</Form.Item>
 			</Form>
 
-			<div style={{ justifyContent: 'space-between', display: 'flex', width: '120px' }}>
+			<div
+				style={{
+					justifyContent: 'space-around',
+					margin: '0 auto',
+					display: 'flex',
+					width: '200px',
+				}}
+			>
 				<Button
 					onClick={(e) => loginKakao(e)}
 					style={{

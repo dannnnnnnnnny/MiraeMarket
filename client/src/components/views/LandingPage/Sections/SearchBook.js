@@ -14,8 +14,8 @@ function SearchBook(props) {
 
 	return (
 		<div style={{ marginLeft: '18%', paddingTop: '5%' }}>
-			<Title level={1} style={{ marginLeft: '22%', color: 'white' }}>
-				찾으시는 책이 있으신가요?
+			<Title level={1} style={{ marginLeft: '22%', color: 'white', width: '60%' }}>
+				찾으시는 책을 검색해주세요
 			</Title>
 			<div style={{ display: 'flex' }}>
 				<Input

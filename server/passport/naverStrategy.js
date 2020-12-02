@@ -8,7 +8,9 @@ module.exports = (passport) => {
 			{
 				clientID: NAVER_ID,
 				clientSecret: NAVER_CLIENT,
-				callbackURL: 'http://localhost:5000/api/users/naver/callback',
+				// callbackURL: 'http://localhost:5000/api/users/naver/callback',
+				callbackURL:
+					'https://mirae-market.herokuapp.com/api/users/naver/callback',
 			},
 			async (req, accessToken, refreshToken, profile, done) => {
 				try {

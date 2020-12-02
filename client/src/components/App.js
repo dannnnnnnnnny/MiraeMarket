@@ -11,10 +11,14 @@ import RegisterPage from './views/RegisterPage/RegisterPage.js';
 import UploadProductPage from './views/UploadProductPage/UploadProductPage.js';
 import DetailProductPage from './views/DetailProductPage/DetailProductPage.js';
 import BookEditPage from './views/BookEditPage/BookEditPage.js';
+import MyPage from './views/MyPage/MyPage.js';
+import LogoutPage from './views/LogoutPage/LogoutPage.js';
+import MyPageEdit from './views/MyPage/MypageEdit.js';
 import CartPage from './views/CartPage/CartPage.js';
 import ChatPage from './views/ChatPage/ChatPage.js';
 import NavBar from './views/NavBar/NavBar';
 import Footer from './views/Footer/Footer';
+import OtherUserPage from './views/OtherUserPage/OtherUserPage';
 
 //null   Anyone Can go inside
 //true   only logged in user can go inside
@@ -55,6 +59,14 @@ function App() {
 						component={Auth(BookEditPage, true)}
 					/>
 					<Route exact path="/user/cart" component={Auth(CartPage, true)} />
+					<Route exact path="/mypage" component={Auth(MyPage, true)} />
+					<Route exact path="/edit" component={Auth(MyPageEdit, true)} />
+					<Route
+						exact
+						path="/profile/:userId"
+						component={Auth(OtherUserPage, true)}
+					/>
+					<Route exact path="/logout" component={Auth(LogoutPage, true)} />
 				</Switch>
 			</div>
 			<Footer />

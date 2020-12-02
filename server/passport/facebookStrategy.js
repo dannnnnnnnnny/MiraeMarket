@@ -8,7 +8,9 @@ module.exports = (passport) => {
 			{
 				clientID: FACEBOOK_ID,
 				clientSecret: FACEBOOK_SECRET,
-				callbackURL: 'http://localhost:5000/api/users/facebook/callback',
+				// callbackURL: 'http://localhost:5000/api/users/facebook/callback',
+				callbackURL:
+					'https://mirae-market.herokuapp.com/api/users/facebook/callback',
 			},
 			async (req, accessToken, refreshToken, profile, done) => {
 				try {

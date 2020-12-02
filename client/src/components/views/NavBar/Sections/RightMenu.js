@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import { Menu, Badge } from 'antd';
+import { Menu } from 'antd';
 // import axios from 'axios';
 import { logoutUser } from '../../../../_actions/user_actions';
 // import { USER_SERVER } from '../../../Config';
@@ -39,14 +39,15 @@ function RightMenu(props) {
 					<Link to="/upload">업로드</Link>
 				</Menu.Item>
 				<Menu.Item key="cart">
-					<Badge count={5}>
 						<Link
 							to="/user/cart"
 							style={{ marginRight: -22, color: '#667777' }}
 						>
-							찜 목록
+							거래 목록
 						</Link>
-					</Badge>
+				</Menu.Item>
+				<Menu.Item key="mypage">
+					<Link to="/mypage">마이페이지</Link>
 				</Menu.Item>
 				<Menu.Item key="logout">
 					<a onClick={(e) => logoutHandler(e)}>로그아웃</a>
@@ -57,15 +58,3 @@ function RightMenu(props) {
 }
 
 export default withRouter(RightMenu);
-
-// useEffect(() => {
-//   setUserId(window.localStorage.getItem('userId'))
-// }, [])
-
-// const logoutHandler = () => {
-//   dispatch(logoutUser())
-//   window.localStorage.setItem('userId', '')
-//   setUserId(window.localStorage.getItem('userId'))
-// };
-
-// if (!userId || userId ==='') {

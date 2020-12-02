@@ -9,7 +9,8 @@ function ProductImage(props) {
 
 			let images = [];
 			props.detail.image.forEach(item => {
-				images.push(`http://localhost:5000/${item}`)
+				// images.push(`http://localhost:5000/${item}`)
+				images.push(`https://mirae-market.herokuapp.com/${item}`)
 			})
 			setImages(images);		
 		}

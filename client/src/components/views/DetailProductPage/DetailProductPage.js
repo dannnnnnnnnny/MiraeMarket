@@ -86,7 +86,7 @@ function DetailProductPage(props) {
 				<h1>{Product.title}</h1>
 			</div>
 			<div style={{ float: 'right' }}>
-				{Product &&
+				{Product.writer &&
 				user.userData._id &&
 				Product.writer._id === user.userData._id ? (
 					<>

@@ -7,7 +7,7 @@ function FileUpload(props) {
 	const [image, setImage] = useState('');
 
 	useEffect(() => {
-		if (props.editData && props.editData) {
+		if (props.editData) {
 			console.log(props.editData);
 			setImage(props.editData);
 		}
@@ -19,7 +19,7 @@ function FileUpload(props) {
 			header: { 'content-type': 'multipart/form-data' },
 		};
 		formData.append('file', files[0]);
-		console.log('files : ', files);
+		console.log('files : ', files[0]);
 		try {
             const response = await axios.post('/api/users/profileImage', formData, config);
             console.log("res : ", response)
@@ -44,8 +44,8 @@ function FileUpload(props) {
 						<section>
 							<div
 								style={{
-									width: 100,
-									height: 100,
+									width: 150,
+									height: 150,
 									display: 'flex',
 									border: '1px solid lightgray',
 									alignItems: 'center',
@@ -63,15 +63,16 @@ function FileUpload(props) {
 				<div
 					style={{
 						// display: 'flex',
-						width: '100px',
-						height: '100px',
+						width: '150px',
+						height: '150px',
 					}}
 				>
 					{image !== '' && (
-						<div onDoubleClick={() => deleteHandler(image)}>
+						<div onClick={() => deleteHandler(image)}>
 							<img
-								style={{ width: '100px', height: '100px' }}
-								src={`http://localhost:5000/${image}`}
+								style={{ width: '150px', height: '150px' }}
+								// src={`http://localhost:5000/${image}`}
+								src={`https://mirae-market.herokuapp.com/${image}`}
 								alt={`${image}`}
 							/>
 						</div>

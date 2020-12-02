@@ -13,7 +13,7 @@ function Footer() {
 				// backgroundColor: '#23272a',
 			}}
 		>
-			<p> 김동휘 & 김형욱 & 이다원 </p>
+			<p> &copy; Copyright 김동휘 & 김형욱 & 이다원</p>
 		</div>
 	);
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Comment, Avatar } from 'antd';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './ChatCard.css';
 function ChatCard(props) {
@@ -25,12 +26,17 @@ function ChatCard(props) {
 				<Comment
 					author={
 						props.chat.sender && (
-							<p>{props.chat.sender.name}</p>
+							<Link to={`/profile/${props.chat.sender._id}`}>
+								{props.chat.sender.name}
+							</Link>
 						)
 					}
 					avatar={
 						<Avatar
-							src={props.chat.sender && `http://localhost:5000/${props.chat.sender.image}`}
+							src={
+								props.chat.sender &&
+								`http://localhost:5000/${props.chat.sender.image}`
+							}
 							alt={props.chat.sender && props.chat.sender.name}
 						/>
 					}
@@ -41,7 +47,6 @@ function ChatCard(props) {
 							</span>
 						</div>
 					}
-
 				/>
 			</div>
 		);

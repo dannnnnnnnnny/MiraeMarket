@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { registerUser } from "../../../_actions/user_actions";
 import { useDispatch } from "react-redux";
 import { USER_SERVER } from "../../Config";
-import { Form, Input, Button, Upload} from 'antd';
+import { Form, Input, Button, notification} from 'antd';
 import Axios from "axios";
-import { animateClass, animateText, samples } from 'react-punch';
+import { animateClass } from 'react-punch';
 import { css } from 'emotion';
 import ProfileImageUpload from '../../utils/ProfileImageUpload';
 import {
-	SmileOutlined,
-	FrownOutlined,
 	EditFilled,
 	UserOutlined,
 } from '@ant-design/icons';
@@ -38,19 +36,30 @@ function RegisterPage(props) {
     ${animateClass()}`
   ;
   
+  const openNotificationWithIcon = (type) => {
+	notification[type]({
+		message: '환영합니다',
+		description: '회원가입 성공!',
+		duration: 2,
+	});
+};
+
   const onFinish = (values) => {
 
-    const { email, name, password } = values;
+    const { email, name, password, phone, major } = values;
 
     let dataToSubmit = {
 			email: email,
 			name: name,
 			password: password,
 			image: image,
+			phone: phone,
+			major: major
     };
     
 		dispatch(registerUser(dataToSubmit)).then((response) => {
 			if (response.payload.success) {
+				openNotificationWithIcon('success');
 				props.history.push('/login');
 			} else {
 				alert("회원가입 실패");
@@ -104,15 +113,24 @@ function RegisterPage(props) {
 	};
 
   return (
-		<div className="app">
-			<div style={{ display: 'flex', marginTop: '-10%' }}>
+		<div
+			style={{
+				display: 'block',
+				margin: '-7% auto auto auto',
+				justifyContent: 'center',
+				alignItems: 'center',
+				width: '350px',
+				height: '600px',
+			}}
+		>
+			<div
+				style={{ display: 'flex', margin: '0 auto', justifyContent: 'center' }}
+			>
 				<h1 className={HeaderStyle}>Register</h1>
 			</div>
 			<div
 				style={{
 					display: 'flex',
-          width: '350px',
-          height: '100px',
 					justifyContent: 'space-between',
 				}}
 			>
@@ -130,7 +148,6 @@ function RegisterPage(props) {
 				onFinishFailed={HandleFinishFailed}
 				// validateMessages={validateMessages}
 				scrollToFirstError={true}
-				style={{ width: '350px', height: '300px' }}
 			>
 				<Form.Item
 					// required
@@ -172,6 +189,14 @@ function RegisterPage(props) {
 						prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
 						placeholder="닉네임"
 					/>
+				</Form.Item>
+
+				<Form.Item name="phone">
+					<Input placeholder="전화번호" />
+				</Form.Item>
+
+				<Form.Item name="major">
+					<Input placeholder="학과" />
 				</Form.Item>
 
 				<Form.Item

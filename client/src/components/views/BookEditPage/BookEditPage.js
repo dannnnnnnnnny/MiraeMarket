@@ -33,32 +33,33 @@ function BookEditPage(props) {
         Axios
             .get(`/api/product/products_by_id?id=${productId}&type=single`)
             .then((response) => {
+                // console.log("잘옴? : ", response)
                 setProduct({ 
-                    title: response.data[0].title,
-                    describtion: response.data[0].describtion,
-                    price: response.data[0].price,
-                    category: response.data[0].category,
-                    images: response.data[0].image,
-                    writer: response.data[0].writer,
+                    title: response.data.title,
+                    describtion: response.data.describtion,
+                    price: response.data.price,
+                    category: response.data.category,
+                    images: response.data.image,
+                    writer: response.data.writer,
                 });
             })
             .catch((err) => alert(err));    
     }, [productId]);
         
     const titleChangeHandler = (e) => {
-        setProduct({...Product, title: e.currentTarget.value});
+        setProduct({...Product, title: e.target.value});
     };
 
     const describtionChangeHandler = (e) => {
-        setProduct({ ...Product, describtion: e.currentTarget.value });
+        setProduct({ ...Product, describtion: e.target.value });
     };
 
     const priceChangeHandler = (e) => {
-        setProduct({ ...Product, price: e.currentTarget.value });
+        setProduct({ ...Product, price: e.target.value });
     };
 
     const categoryChangeHandler = (e) => {
-        setProduct({ ...Product, category: e.currentTarget.value });
+        setProduct({ ...Product, category: e.target.value });
     };
 
     const updateImages = (newImages) => {

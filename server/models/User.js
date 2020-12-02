@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema({
 		type: String,
 		minglength: 5,
 	},
+	major: {
+		type: String,
+		default: '',
+	},
 	role: {				// 0: 일반 유저, 1: 관리자
 		type: Number,
 		default: 0,
@@ -26,9 +30,9 @@ const userSchema = mongoose.Schema({
 		type: Array,
 		default: [],
 	},
-	history: {
-		type: Array,
-		default: [],
+	phone: {
+		type: String,
+		default: '',
 	},
 	image: String,
 	snsId: {

@@ -107,10 +107,27 @@ router.post('/products', (req, res) => {
 	}
 });
 
+router.get('/bookcart', (req, res) => {
+
+	let ids = req.query.id.split(',');
+
+	let bookIds = ids.map((bookId) => {
+		return bookId;
+	})
+	
+	Product.find({ _id: bookIds })
+		.populate('writer')
+		.exec((err, product) => {
+
+			if (err) res.status(400).send(err);
+			return res.status(200).send(product);
+		})
+})
+
 router.get('/products_by_id', (req, res) => {
 	//productId를 이용하여 정보 가져오기
 	// let type = req.query.type;
-	let productIds = req.query.id;
+	let productId = req.query.id;
 
 	// if (type == 'array') {
 	// 	// id=123214124,132142121,12123213 를
@@ -122,7 +139,7 @@ router.get('/products_by_id', (req, res) => {
 	// 	});
 	// }
 
-	Product.findById(productIds)
+	Product.findById(productId)
 		.populate('writer')
 		.exec((err, product) => {
 			if (err) res.status(400).send(err);
@@ -143,7 +160,7 @@ router.delete('/products_by_id', (req, res) => {
 
 	Product.findByIdAndRemove({ _id: req.query.id })
 		.exec((err, product) => {
-			if (err) res.status(500).send({ success: false, err});
+			if (err) return res.status(500).send({ success: false, err});
 			
 			product.image.forEach(image => {
 				fs.unlink(image, (err) => {
@@ -154,7 +171,14 @@ router.delete('/products_by_id', (req, res) => {
 
 			return res.status(200).send({ success: true });
 		});
-		
 });
+
+router.get('/mypage', (req, res) => [
+	Product.find({ writer: req.query.id })
+		.exec((err, Product) => {
+			if (err) return res.status(500).send({ success: false, err});
+			return res.status(200).send({ success: true, Product })
+		})
+])
 
 module.exports = router;

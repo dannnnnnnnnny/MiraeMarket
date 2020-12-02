@@ -71,15 +71,17 @@ function FileUpload(props) {
 					overflow: 'auto',
 				}}
 			>
-				{images && images.map((image, idx) => (
-					<div onDoubleClick={() => deleteHandler(image)} key={idx}>
-						<img
-							style={{ width: '250px', height: '330px' }}
-							src={`http://localhost:5000/${image}`}
-							alt={`${image}_${idx}`}
-						/>
-					</div>
-				))}
+				{images &&
+					images.map((image, idx) => (
+						<div onDoubleClick={() => deleteHandler(image)} key={idx}>
+							<img
+								style={{ width: '250px', height: '330px' }}
+								// src={`http://localhost:5000/${image}`}
+								src={`https://mirae-market.herokuapp.com/${image}`}
+								alt={`${image}_${idx}`}
+							/>
+						</div>
+					))}
 			</div>
 		</div>
 	);

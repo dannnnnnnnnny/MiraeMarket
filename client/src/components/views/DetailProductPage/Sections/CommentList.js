@@ -8,6 +8,7 @@ import {
 } from 'antd';
 // import moment from 'moment';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
@@ -21,8 +22,6 @@ function CommentList(props) {
 	const user = useSelector(state => state.user);
 	const [editMessage, setEditMessage] = useState('')
 
-	
-	console.log(props.commentList && props.commentList);
 	const openNotificationWithIcon = (type, message, description) => {
 		notification[type]({
 			message,
@@ -121,10 +120,14 @@ function CommentList(props) {
 														showEditModal(comment._id);
 													}}
 												>
-													<EditOutlined />
+													<Link to>
+														<EditOutlined />
+													</Link>
 												</p>,
 												<p onClick={() => showDeleteModal(comment._id)}>
-													<DeleteOutlined />
+													<Link to>
+														<DeleteOutlined />
+													</Link>
 												</p>,
 										  ]
 										: []
@@ -133,10 +136,15 @@ function CommentList(props) {
 								<List.Item.Meta
 									avatar={
 										<Avatar
-											src={`http://localhost:5000/${comment.writer.image}`}
+											// src={`http://localhost:5000/${comment.writer.image}`}
+											src={`https://mirae-market.herokuapp.com/${comment.writer.image}`}
 										/>
 									}
-									title={<p>{comment.writer.name}</p>}
+									title={
+										<Link to={`/profile/${comment.writer._id}`}>
+											{comment.writer.name}
+										</Link>
+									}
 									description={
 										<p style={{ color: 'black' }}>{`${comment.message}`}</p>
 									}
@@ -157,7 +165,7 @@ function CommentList(props) {
 					cancelText={'취소'}
 					okType="danger"
 				>
-					<Input
+					<Input.TextArea
 						onChange={(e) => setEditMessage(e.target.value)}
 						value={editMessage}
 					/>

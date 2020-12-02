@@ -1,5 +1,6 @@
 import React from 'react';
 import './UserCardBlock.css';
+import { Link } from 'react-router-dom';
 
 function UserCardBlock(props) {
 	const renderCartImage = (images) => {
@@ -13,13 +14,19 @@ function UserCardBlock(props) {
 		props.products.map((product, index) => (
 			<tr key={index}>
 				<td>
-					<img
-						style={{ width: '70px' }}
-						alt="product"
-						src={renderCartImage(product.image)}
-					/>
+					<Link to={`/product/${product._id}`}>
+						<img
+							style={{ width: '70px' }}
+							alt="product"
+							src={renderCartImage(product.image)}
+						/>
+					</Link>
 				</td>
-				<td>{product.quantity} EA</td>
+				<td>
+					<Link to={`/profile/${product.writer._id}`}>
+						{product.writer.major} {product.writer.name}
+					</Link>
+				</td>
 				<td>{product.price} 원</td>
 				<td>
 					<button onClick={() => props.removeItem(product._id)}>Remove</button>
@@ -31,10 +38,10 @@ function UserCardBlock(props) {
 			<table>
 				<thead>
 					<tr>
-						<th>Product Image</th>
-						<th>Product Quantity</th>
-						<th>Product Price</th>
-						<th>Remove from Cart</th>
+						<th>도서 이미지</th>
+						<th>판매자</th>
+						<th>판매가</th>
+						<th>버튼</th>
 					</tr>
 				</thead>
 				<tbody>{renderItems()}</tbody>
