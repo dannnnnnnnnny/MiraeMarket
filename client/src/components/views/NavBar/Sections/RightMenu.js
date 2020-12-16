@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Menu } from 'antd';
-// import axios from 'axios';
-import { logoutUser } from '../../../../_actions/user_actions';
-// import { USER_SERVER } from '../../../Config';
+import { logoutUser } from '../../../../actions/user_actions';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+// 오른쪽 메뉴
 function RightMenu(props) {
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 
+	// 로그아웃 버튼 클릭시
 	const logoutHandler = (e) => {
 		e.preventDefault();
 		dispatch(logoutUser()).then((response) => {
@@ -39,12 +39,7 @@ function RightMenu(props) {
 					<Link to="/upload">업로드</Link>
 				</Menu.Item>
 				<Menu.Item key="cart">
-						<Link
-							to="/user/cart"
-							style={{ marginRight: -22, color: '#667777' }}
-						>
-							거래 목록
-						</Link>
+						<Link to="/user/cart">거래 목록</Link>
 				</Menu.Item>
 				<Menu.Item key="mypage">
 					<Link to="/mypage">마이페이지</Link>

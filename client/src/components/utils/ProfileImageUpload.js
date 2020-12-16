@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
+// FileUpload.js와 동일 (이미지 크기만 다름)
 function FileUpload(props) {
 	const [image, setImage] = useState('');
 
@@ -71,8 +72,8 @@ function FileUpload(props) {
 						<div onClick={() => deleteHandler(image)}>
 							<img
 								style={{ width: '150px', height: '150px' }}
-								// src={`http://localhost:5000/${image}`}
-								src={`https://mirae-market.herokuapp.com/${image}`}
+								src={`http://localhost:5000/${image}`}
+								// src={`https://mirae-market.herokuapp.com/${image}`}
 								alt={`${image}`}
 							/>
 						</div>

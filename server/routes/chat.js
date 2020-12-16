@@ -4,6 +4,8 @@ const { Chat } = require('../models/Chat');
 const multer = require('multer');
 const { isLoggedIn } = require('./middlewares');
 
+// 전체 채팅 기록 조회,
+// populate를 통해서 sender 유저 정보까지 모두 가져옴 (SQL join한 것 처럼)
 router.get('/getChats', (req, res) => {
 	Chat.find()
 		.populate('sender')
@@ -13,6 +15,7 @@ router.get('/getChats', (req, res) => {
 		});
 });
 
+// multer를 통해 destination 경로에 이미지 파일을 filename 명으로 지정해서 저장
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, 'uploads/chats/');
@@ -22,13 +25,17 @@ var storage = multer.diskStorage({
 	},
 });
 
+// single을 통해 파일 하나를 받겠다 선언
 var upload = multer({ storage: storage }).single('file');
 
+// isLoggedIn 미들웨어를 통해서 이미 로그인된 유저만 가능하게
+// 이미지 업로드 기능 수행 API
 router.post('/uploadfiles', isLoggedIn, (req, res) => {
 	upload(req, res, (err) => {
 		if (err) {
 			return res.json({ success: false, err });
 		}
+		// success와 저장된 파일 경로 json 형식으로 리턴
 		return res.json({ success: true, url: res.req.file.path });
 	});
 });

@@ -9,9 +9,9 @@ module.exports = (passport) => {
 		new KakaoStrategy(
 			{
 				clientID: KAKAO_ID,
-				// callbackURL: 'http://localhost:5000/api/users/kakao/callback',
-				callbackURL:
-					'https://mirae-market.herokuapp.com/api/users/kakao/callback',
+				callbackURL: 'http://localhost:5000/api/users/kakao/callback',
+				// callbackURL:
+				// 	'https://mirae-market.herokuapp.com/api/users/kakao/callback',
 			},
 			async (accessToken, refreshToken, profile, done) => {
 				try {

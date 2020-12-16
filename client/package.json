@@ -1,6 +1,7 @@
 {
   "name": "client",
-  "version": "0.1.0",
+	"version": "0.1.0",
+	 "description": "미래장터 프로젝트 팀원 : 김동휘 & 김형욱 & 이다원",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "4.0.0-rc.0",

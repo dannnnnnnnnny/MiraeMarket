@@ -5,11 +5,7 @@ const { Product } = require('../models/Product');
 const { isLoggedIn } = require('./middlewares');
 const fs = require('fs');
 
-//=================================
-//             Product
-//=================================
-
-// npmjs.com/package/multer
+// multer를 통한 이미지 저장 (저장 위치, 파일명으로 uploads/ 경로에 이미지 저장)
 var storage = multer.diskStorage({
 	// 저장 위치
 	destination: function (req, file, cb) {
@@ -22,8 +18,10 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage }).single('file');
 
+// 이미지 저장 API
+// 파일경로, 파일이름을 리턴해서 상품 게시물 작성 API에 사용
 router.post('/image', isLoggedIn, (req, res) => {
-	// 가져온 이미지 저장
+	
 	upload(req, res, (err) => {
 		if (err) {
 			return res.json({ success: false, err });
@@ -36,8 +34,9 @@ router.post('/image', isLoggedIn, (req, res) => {
 	});
 });
 
+// 상품 게시물 작성 API
+// 받아온 body 정보를 Product 모델 인스턴스 생성 후 저장
 router.post('/', isLoggedIn, (req, res) => {
-	// 받아온 정보 db에 저장
 	const product = new Product(req.body);
 	product.save((err) => {
 		if (err) {
@@ -47,10 +46,16 @@ router.post('/', isLoggedIn, (req, res) => {
 	});
 });
 
+// 상품 필터, 검색을 위한 API
+// product collections에 들어있는 모든 정보 가져옴
+// limit 은 한번에 가져올 데이터 갯수
+// skip은 몇번째 데이터부터 가져올지
+// term은 검색창에 입력한 검색 문자열
+// filters가 price(가격)이면 2개의 배열 (최소가격, 최대가격)이 추가되는데
+// 최소가격 이상 (gte), 최대가격 이하 (lte)로 찾기 위해서 처리해줌 (findArgs={'price': $gte: 1000, $lte: 20000})
+// filters가 category면 그대로 저장 (findArgs = {'category': ['전공', '교양', ...]} )
 router.post('/products', (req, res) => {
-	// product collections에 들어있는 모든 정보 가져옴
-
-	let limit = req.body.limit ? parseInt(req.body.limit) : 20;
+	let limit = req.body.limit ? parseInt(req.body.limit) : 12;
 	let skip = req.body.skip ? parseInt(req.body.skip) : 0;
 	let term = req.body.searchTerm;
 	let findArgs = {};
@@ -59,16 +64,16 @@ router.post('/products', (req, res) => {
 		if (req.body.filters[key].length > 0) {
 			if (key === 'price') {
 				findArgs[key] = {
-					$gte: req.body.filters[key][0],
-					$lte: req.body.filters[key][1],
+					$gte: req.body.filters[key][0],	// index 0은 최소가격
+					$lte: req.body.filters[key][1],	//	 "   1은 최대가격
 				};
 			} else {
-				findArgs[key] = req.body.filters[key];
+				findArgs[key] = req.body.filters[key]; // category
 			}
 		}
 	}
 
-
+	// 검색 문자열이 있으면 정규식을 통해서 대소문자 구별없이(i) 제목과 설명에서 $or을 통해 상품을 찾음
 	if (term) {
 		Product.find(findArgs)
 			.find({
@@ -78,7 +83,7 @@ router.post('/products', (req, res) => {
 				],
 			})
 			.populate('writer') // 올린 writer의 정보(이름, 이메일 등)를 가져오기 위해
-			.sort({ createdAt: -1 })
+			.sort({ createdAt: -1 })	// 역정렬을 통해 최신데이터부터 보이도록 함.
 			.skip(skip)
 			.limit(limit)
 
@@ -91,6 +96,7 @@ router.post('/products', (req, res) => {
 					.json({ success: true, productInfo, postSize: productInfo.length });
 			});
 	} else {
+		// 검색어 없이 filter 만 사용시
 		Product.find(findArgs)
 			.populate('writer')
 			.sort({ 'createdAt': -1 })
@@ -107,6 +113,9 @@ router.post('/products', (req, res) => {
 	}
 });
 
+// '123, 234, 345' 형식의 거래목록 상품id String이 넘어옴
+// split으로 ['123', '234', '345'] 리스트 형식으로 변환시켜줌
+// 리스트 형식의 상품ID로 해당 상품 정보 검색
 router.get('/bookcart', (req, res) => {
 
 	let ids = req.query.id.split(',');
@@ -114,50 +123,46 @@ router.get('/bookcart', (req, res) => {
 	let bookIds = ids.map((bookId) => {
 		return bookId;
 	})
-	
+
 	Product.find({ _id: bookIds })
 		.populate('writer')
 		.exec((err, product) => {
 
-			if (err) res.status(400).send(err);
+			if (err) 
+				return res.status(400).send(err);
 			return res.status(200).send(product);
 		})
 })
 
-router.get('/products_by_id', (req, res) => {
-	//productId를 이용하여 정보 가져오기
-	// let type = req.query.type;
+// 상세정보 조회 API
+//productId를 이용하여 상품 상세정보 가져오기
+// 조회수 1씩 증가시킴
+router.get('/products', (req, res) => {
 	let productId = req.query.id;
-
-	// if (type == 'array') {
-	// 	// id=123214124,132142121,12123213 를
-	// 	//  productIds = ['12321421','1521213124','15125125']
-	// 	// 이런식으로 바꿔줘야 함.
-	// 	let ids = req.query.id.split(',');
-	// 	productIds = ids.map((item) => {
-	// 		return item;
-	// 	});
-	// }
 
 	Product.findById(productId)
 		.populate('writer')
 		.exec((err, product) => {
-			if (err) res.status(400).send(err);
+			if (err) 
+				return res.status(400).send(err);
 			product.views++;
 			product.save();
 			return res.status(200).send(product);
 		});
 });
 
-router.put('/products_by_id', (req, res) => {
+// 상세정보 수정 API
+// id로 해당 상품 상세정보 가져와서 $set으로 수정함
+router.put('/products', (req, res) => {
 	Product.update({ _id: req.query.id }, { $set: req.body }).exec((err, result) => {
-		if (err) res.status(500).send({ success: false, err});
+		if (err) 
+			return res.status(500).send({ success: false, err});
 		return res.status(200).send({ success: true });
 	});
 });
 
-router.delete('/products_by_id', (req, res) => {
-
+// 해당 상품게시물 삭제API
+router.delete('/products', (req, res) => {
 	Product.findByIdAndRemove({ _id: req.query.id })
 		.exec((err, product) => {
 			if (err) return res.status(500).send({ success: false, err});
@@ -173,6 +178,8 @@ router.delete('/products_by_id', (req, res) => {
 		});
 });
 
+// mypage API
+// 모든 상품 중 해당 글쓴이가 작성한 글을 모두 가져옴
 router.get('/mypage', (req, res) => [
 	Product.find({ writer: req.query.id })
 		.exec((err, Product) => {

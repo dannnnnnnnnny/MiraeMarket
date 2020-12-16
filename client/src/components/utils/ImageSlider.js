@@ -1,5 +1,6 @@
 import React from 'react';
 import { Carousel } from 'antd';
+
 function ImageSlider(props) {
 	return (
 		<div>
@@ -19,8 +20,8 @@ function ImageSlider(props) {
 									height: '270px',
 									objectFit: 'cover',
 								}}
-								// src={`http://localhost:5000/${image}`}
-								src={`https://mirae-market.herokuapp.com/${image}`}
+								src={`http://localhost:5000/${image}`}
+								// src={`https://mirae-market.herokuapp.com/${image}`}
 								alt={`product_${image}`}
 							/>
 						</div>

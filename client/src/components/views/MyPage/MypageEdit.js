@@ -4,6 +4,7 @@ import { Typography, Input, Button, Form } from 'antd';
 import { useSelector } from 'react-redux';
 import ProfileImageUpload from '../../utils/ProfileImageUpload';
 
+// 내 프로필 수정 컴포넌트
 function MypageEdit(props) {
 	const user = useSelector(state => state.user);
     const [image, setImage] = useState(user.userData.image)
@@ -21,14 +22,12 @@ function MypageEdit(props) {
     };
         
     const onFinish = (values) => {
-        // const { name, major } = values;
-
         let dataToSubmit = {
-            id: user.userData._id,
-            name: editProfile.name,
-			major: editProfile.major,
-			image: image,
-			phone: editProfile.phone,
+					id: user.userData._id,
+					name: editProfile.name,
+					major: editProfile.major,
+					image: image,
+					phone: editProfile.phone,
         };
 
         Axios.put(`api/users/edit`, dataToSubmit).then((response) => {
@@ -97,8 +96,6 @@ function MypageEdit(props) {
 					layout={'horizontal'}
 					onFinish={onFinish}
 					onFinishFailed={HandleFinishFailed}
-					// validateMessages={validateMessages}
-
 					scrollToFirstError={true}
 				>
 					<Input

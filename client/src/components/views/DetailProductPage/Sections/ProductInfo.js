@@ -1,7 +1,7 @@
 import React from 'react';
 import { Descriptions, Button, Badge } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { addToCart } from '../../../../_actions/user_actions';
+import { addToCart } from '../../../../actions/user_actions';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ function ProductInfo(props) {
 		dispatch(addToCart(props.detail._id));
 		props.detail.sold = true;
 	};
+	
 	return (
 		<div style={{ margin: '0 auto' }}>
 			<br />

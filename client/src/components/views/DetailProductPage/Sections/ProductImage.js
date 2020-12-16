@@ -4,13 +4,14 @@ import Carousel from 'nuka-carousel';
 function ProductImage(props) {
 	const [Images, setImages] = useState();
 
+	// 상세보기 이미지를 하나씩 배열에 담음
 	useEffect(() => {
 		if (props.detail.image && props.detail.image.length > 0) {
 
 			let images = [];
 			props.detail.image.forEach(item => {
-				// images.push(`http://localhost:5000/${item}`)
-				images.push(`https://mirae-market.herokuapp.com/${item}`)
+				images.push(`http://localhost:5000/${item}`)
+				// images.push(`https://mirae-market.herokuapp.com/${item}`)
 			})
 			setImages(images);		
 		}

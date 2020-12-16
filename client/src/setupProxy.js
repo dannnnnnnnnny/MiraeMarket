@@ -9,3 +9,5 @@ module.exports = function (app) {
         })
     );
 };
+
+// Proxy (localhost:3000 => localhost:5000) 처리를 위한 코드

@@ -3,33 +3,34 @@ import Dropzone from 'react-dropzone';
 import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
+// 파일 업로드 컴포넌트
 function FileUpload(props) {
 	const [images, setImages] = useState([]);
 
+	// 첫 작성이 아닌 수정이라면 이미지 그대로 가져옴
 	useEffect(() => {
 		if (props.editData && props.editData) {
-			console.log(props.editData);
 			setImages(props.editData);
 		}
 	}, [props.editData]);
 
+	// 이미지 drop 후, 서버에 이미지 저장한 후, 이미지에 대한 경로 상위 컴포넌트로 보냄
 	const dropHandler = async (files) => {
 		let formData = new FormData();
 		const config = {
 			header: { 'content-type': 'multipart/form-data' },
 		};
 		formData.append('file', files[0]);
-		console.log("files : ", files)
 		try {
 			const response = await axios.post('/api/product/image', formData, config);
 			setImages([...images, response.data.filePath]);
-			console.log([...images, response.data.filePath]);
 			props.refreshFunction([...images, response.data.filePath]);
 		} catch (error) {
 			alert('이미지 업로드 실패');
 		}
 	};
 
+	// 더블 클릭시 이미지 삭제 (이미지의 index 찾은 후 splice로 삭제)
 	const deleteHandler = (image) => {
 		const currentIndex = images.indexOf(image);
 		let newImages = [...images];
@@ -76,8 +77,8 @@ function FileUpload(props) {
 						<div onDoubleClick={() => deleteHandler(image)} key={idx}>
 							<img
 								style={{ width: '250px', height: '330px' }}
-								// src={`http://localhost:5000/${image}`}
-								src={`https://mirae-market.herokuapp.com/${image}`}
+								src={`http://localhost:5000/${image}`}
+								// src={`https://mirae-market.herokuapp.com/${image}`}
 								alt={`${image}_${idx}`}
 							/>
 						</div>

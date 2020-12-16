@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useMemo } from 'react'
 import {
 	List,
 	Avatar,
@@ -22,6 +22,17 @@ function CommentList(props) {
 	const user = useSelector(state => state.user);
 	const [editMessage, setEditMessage] = useState('')
 
+	const CommentStyle = useMemo(
+		() => ({
+			margin: '0 auto',
+			width: '100%',
+			maxHeight: '350px',
+			overflowY: 'scroll',
+		}),
+		[],
+	);
+
+	// 알림창
 	const openNotificationWithIcon = (type, message, description) => {
 		notification[type]({
 			message,
@@ -30,12 +41,14 @@ function CommentList(props) {
 		});
 	};
 
+	// 스크롤 아래로 내려가게
 	const scrollToBottom = () => {
 		commentEndLine.current.scrollIntoView({
 			behavior: 'smooth',
 		});
 	};
 
+	// 컴포넌트가 업데이트 될 때 마다 스크롤 내려줌
 	useEffect(() => {
 		if (props.commentList && commentEndLine.current) {
 			scrollToBottom();
@@ -48,6 +61,7 @@ function CommentList(props) {
 		setEditId(commentId)
 	};
 
+	// 댓글 수정
 	const handleEditOk = () => {
 		let body = {
 			message: editMessage
@@ -99,12 +113,7 @@ function CommentList(props) {
 			<div style={{ margin: '0 auto', width: '80%' }}>
 				<p>{props.commentList && `${props.commentList.length}개의 댓글`}</p>
 				<div
-					style={{
-						margin: '0 auto',
-						width: '100%',
-						maxHeight: '350px',
-						overflowY: 'scroll',
-					}}
+					style={CommentStyle}
 				>
 					<List
 						// header={props.commentList && `${props.commentList.length}개의 댓글`}
@@ -136,8 +145,8 @@ function CommentList(props) {
 								<List.Item.Meta
 									avatar={
 										<Avatar
-											// src={`http://localhost:5000/${comment.writer.image}`}
-											src={`https://mirae-market.herokuapp.com/${comment.writer.image}`}
+											src={`http://localhost:5000/${comment.writer.image}`}
+											// src={`https://mirae-market.herokuapp.com/${comment.writer.image}`}
 										/>
 									}
 									title={

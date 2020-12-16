@@ -1,31 +1,24 @@
 @import '~antd/dist/antd.css';
 
 .menu {
-	/* padding: 0 20px; */
-	/* border-bottom: solid 0.0001rem #dbdbdb; */
 	height: 80px;
-	/* overflow: auto; */
 	box-shadow: 0 0 20px #dddddd;
 	background-color: #ffffff;
 	font-weight: 600;
 	opacity: 0.85;
 	border: none;
-	/* font-size: 25px; */
 }
 
 .menu__logo {
-	/* height: 55px; */
 	padding-top: 8px;
 	width: 170px;
 	float: left;
 	font-weight: 700;
-	
-	/* background-color: #1d1d1d; */
 }
 
-.menu__logo__span {
+/* .menu__logo__span {
 	color: black,
-}
+} */
 
 .menu__logo a {
 	display: inline-block;
@@ -67,7 +60,7 @@
 	height: 32px;
 	padding: 6px;
 	margin-top: 8px;
-	display: none !important; /* use of important to overwrite ant-btn */
+	display: none !important;
 	background: #3e91f7;
 }
 
@@ -75,12 +68,12 @@
 	padding: 0 !important;
 }
 
-/* align header of Drawer with header of page */
 .menu_drawer .ant-drawer-header {
 	padding: 14px 24px !important;
 }
 
-@media (max-width: 767px) {
+/* 화면이 작아지면 기존 메뉴창 없애고 작은 모바일 메뉴버튼으로 교체 */
+@media (max-width: 720px) {
 	.menu__mobile-button {
 		display: inline-block !important;
 	}

@@ -8,6 +8,7 @@ const { TextArea } = Input;
 function CommentWrite(props) {
 	const [message, setMessage] = useState('')
 
+	// redux store에서 user 정보 가져옴
 	const user = useSelector((state) => state.user);
 
 	const openNotificationWithIcon = (type, NotificationMessage, description) => {
@@ -26,7 +27,6 @@ function CommentWrite(props) {
 		}
 		if (user.userData && !user.userData.isAuth) {
 			return alert('로그인이 필요합니다.');
-			// return history.push({ pathname: '/login', state: '/' });
 		}
 
 		const body = {
@@ -35,12 +35,11 @@ function CommentWrite(props) {
 			message: message,
 			product: props.detail._id,
 		};
-		// ${props.detail._id}
+
 		Axios.post(`/api/comment`, body)
 			.then(
 				(response) => {
 					if (response.data.success) {
-						// console.log(response.data);
 						props.refresh()
 						openNotificationWithIcon(
 							'success',

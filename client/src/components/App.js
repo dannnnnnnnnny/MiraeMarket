@@ -1,32 +1,29 @@
-import 
-	React 
-	// ,{ Suspense } 
-	from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Auth from '../hoc/auth';
+import MainPage from './views/MainPage';
+import LoginPage from './views/LoginPage';
+import RegisterPage from './views/RegisterPage';
+import UploadProductPage from './views/UploadProductPage';
+import DetailProductPage from './views/DetailProductPage';
+import BookEditPage from './views/BookEditPage';
+import MyPage from './views/MyPage';
+import LogoutPage from './views/LogoutPage';
+import MyPageEdit from './views/MyPage';
+import CartPage from './views/CartPage';
+import ChatPage from './views/ChatPage';
+import NavBar from './views/NavBar';
+import Footer from './views/Footer';
+import OtherUserPage from './views/OtherUserPage';
 
-import LandingPage from './views/LandingPage/LandingPage.js';
-import LoginPage from './views/LoginPage/LoginPage.js';
-import RegisterPage from './views/RegisterPage/RegisterPage.js';
-import UploadProductPage from './views/UploadProductPage/UploadProductPage.js';
-import DetailProductPage from './views/DetailProductPage/DetailProductPage.js';
-import BookEditPage from './views/BookEditPage/BookEditPage.js';
-import MyPage from './views/MyPage/MyPage.js';
-import LogoutPage from './views/LogoutPage/LogoutPage.js';
-import MyPageEdit from './views/MyPage/MypageEdit.js';
-import CartPage from './views/CartPage/CartPage.js';
-import ChatPage from './views/ChatPage/ChatPage.js';
-import NavBar from './views/NavBar/NavBar';
-import Footer from './views/Footer/Footer';
-import OtherUserPage from './views/OtherUserPage/OtherUserPage';
-
-//null   Anyone Can go inside
-//true   only logged in user can go inside
-//false  logged in user can't go inside
+// High Order Component (hoc)
+// Auth hoc를 통해서 접근 제어
+// true : 로그인한 유저만 접근 허용
+// false : 미로그인 유저만 접근 허용
+// null : 모두 이용 가능
 
 function App() {
 	return (
-		// <Suspense fallback={<div>Loading...</div>}>
 		<React.Fragment>
 			<NavBar />
 			<div
@@ -39,7 +36,7 @@ function App() {
 				}}
 			>
 				<Switch>
-					<Route exact path="/" component={Auth(LandingPage, null)} />
+					<Route exact path="/" component={Auth(MainPage, null)} />
 					<Route exact path="/chat" component={Auth(ChatPage, true)} />
 					<Route exact path="/login" component={Auth(LoginPage, false)} />
 					<Route exact path="/register" component={Auth(RegisterPage, false)} />
@@ -70,7 +67,6 @@ function App() {
 				</Switch>
 			</div>
 			<Footer />
-			{/* </Suspense> */}
 		</React.Fragment>
 	);
 }

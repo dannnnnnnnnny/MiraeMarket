@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "antd-img-crop": "^3.13.2",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
@@ -39,9 +39,7 @@
     "start": "node server/index.js",
     "backend": "nodemon server/index.js",
     "frontend": "npm run start --prefix client",
-    "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+		"dev": "concurrently \"npm run backend\" \"npm run start --prefix client\""
   },
   "author": "kdh&khu&ldw",
   "license": "ISC"

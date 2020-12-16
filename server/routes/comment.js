@@ -4,14 +4,14 @@ const { Comment } = require('../models/Comment');
 
 const { isLoggedIn } = require('./middlewares');
 
-router.get('/products_by_id', (req, res) => {
+// 해당 상품ID를 통해 댓글을 가져옴
+// populate를 통해 댓글작성자와 상품 데이터까지 모두 가져옴
+router.get('/products', (req, res) => {
     let productIds = req.query.id;
-
 
 	Comment.find({product: productIds})
         .populate('writer')
         .populate('product')
-
 
 		.exec((err, comments) => {
             if (err) return res.status(400).send(err);
@@ -19,6 +19,8 @@ router.get('/products_by_id', (req, res) => {
 		});
 });
 
+// 댓글 작성 API
+// isLoggedIn 미들웨어로 로그인한 유저만 접근가능하게
 router.post('/', isLoggedIn, (req, res) => {
 	// 받아온 정보 db에 저장
 	const comment = new Comment(req.body);
@@ -30,7 +32,9 @@ router.post('/', isLoggedIn, (req, res) => {
 	});
 });
 
-router.put('/', (req, res) => {
+// 댓글 수정 API
+// queryString으로 해당 댓글 id를 가져와서 _id로 조회 후, .update, $set으로 수정함
+router.put('/', isLoggedIn, (req, res) => {
 	Comment.update({ _id: req.query.id }, { $set: req.body }).exec(
 		(err, result) => {
 			if (err) res.status(500).send({ success: false, err });
@@ -39,7 +43,9 @@ router.put('/', (req, res) => {
 	);
 });
 
-router.delete('/', (req, res) => {
+// 댓글 삭제 API
+// queryString으로 해당 id 가져온 후 _id로 찾아서 삭제함.
+router.delete('/', isLoggedIn, (req, res) => {
 	Comment.findByIdAndRemove({ _id: req.query.id })
 		.exec((err, comment) => {
 			if (err) res.status(500).send({ success: false, err});
