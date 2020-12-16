@@ -1,7 +1,7 @@
 @import '~antd/dist/antd.css';
 
 .menu {
-	height: 80px;
+	height: 70px;
 	box-shadow: 0 0 20px #dddddd;
 	background-color: #ffffff;
 	font-weight: 600;
@@ -10,7 +10,7 @@
 }
 
 .menu__logo {
-	padding-top: 8px;
+	padding-top: 0px;
 	width: 170px;
 	float: left;
 	font-weight: 700;
@@ -31,7 +31,7 @@
 }
 
 .menu__container .ant-menu-submenu-title {
-	padding: 10px 20px;
+	padding: 5px 20px;
 }
 
 .menu__container .ant-menu-item a,
@@ -46,12 +46,12 @@
 }
 
 .menu__container .menu_left {
-	margin-top: 5px;
+	margin-top: 0px;
 	float: left;
 }
 
 .menu__container .menu_rigth {
-	margin-top: 5px;
+	margin-top: 0px;
 	float: right;
 }
 

@@ -180,7 +180,7 @@ function LandingPage() {
 		<div
 			style={{
 				width: '75%',
-				margin: '1rem auto',
+				margin: 'auto',
 				height: '100%',
 			}}
 		>
@@ -188,10 +188,10 @@ function LandingPage() {
 			<div
 				style={{
 					marginLeft: '-20%',
-					width: '140%',
+					width: '1557px',
 					height: '700px',
 					backgroundImage: 'url(bg3.jpg)',
-					backgroundSize: 'cover',
+					backgroundSize: 'contain',
 					opacity: 0.9,
 				}}
 			>
