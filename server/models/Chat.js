@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// type은 text말고도 image도 받을 수 있게 해서 처리하려 했는데
-// 아직 text만 처리 가능
+// 채팅 모델
+// 추후 이미지도 송수신할 수 있게 할 예정
 
 // sender는 User의 ObjectId를 외래키처럼 넣어줌
 const chatSchema = mongoose.Schema(

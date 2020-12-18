@@ -9,7 +9,7 @@ import DetailProductPage from './views/DetailProductPage';
 import BookEditPage from './views/BookEditPage';
 import MyPage from './views/MyPage';
 import LogoutPage from './views/LogoutPage';
-import MyPageEdit from './views/MyPage';
+import MyPageEdit from './views/MyPage/MypageEdit';
 import CartPage from './views/CartPage';
 import ChatPage from './views/ChatPage';
 import NavBar from './views/NavBar';

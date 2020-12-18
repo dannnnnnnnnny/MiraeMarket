@@ -123,7 +123,7 @@ function RegisterPage(props) {
 				justifyContent: 'center',
 				alignItems: 'center',
 				width: '350px',
-				height: '600px',
+				height: '800px',
 			}}
 		>
 			<div

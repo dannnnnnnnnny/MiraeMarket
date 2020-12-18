@@ -86,7 +86,7 @@ export function addToCart(bookId) {
 // 거래목록 조회 action
 export function getCartItems(cartItems) {
 	const request = axios
-		.get(`/api/product/bookcart?id=${cartItems}`)
+		.get(`/api/product/cart?id=${cartItems}`)
 		.then((response) => response.data);
 
 

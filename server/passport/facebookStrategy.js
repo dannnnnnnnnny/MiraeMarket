@@ -4,7 +4,10 @@ const { User } = require('../models/User');
 
 // 페이스북 소셜로그인 passport.js
 // 페이스북 개발자 센터에서 설정한 id, 시크릿키를 사용하고 콜백URL 설정
-
+// 받아온 페이스북 프로필 데이터를 통해 가입된 유저인지 DB에서 찾아봄.
+// 가입되어 있는 유저라면 그대로 해당 유저 데이터를 넘김
+// 가입되어 있지 않은 유저라면 회원가입시키고 해당 유저 데이터를 넘김
+ 
 module.exports = (passport) => {
 	passport.use(
 		new FBStrategy(

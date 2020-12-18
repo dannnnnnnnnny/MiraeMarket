@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// 상품 모델
+// 지금은 중고서적만 판매하지만 벼룩시장이기 때문에 다른 상품도 판매할 수 있도록 확장성을 고려
+
 // writer : 유저 정보 ObjectId로 가져옴
 // title : 제목
 // describtion : 설명

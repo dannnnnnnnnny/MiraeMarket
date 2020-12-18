@@ -4,8 +4,8 @@ const { Comment } = require('../models/Comment');
 
 const { isLoggedIn } = require('./middlewares');
 
-// 해당 상품ID를 통해 댓글을 가져옴
-// populate를 통해 댓글작성자와 상품 데이터까지 모두 가져옴
+// 해당 상품ID를 쿼리스트링을 통해 받아와서 해당 상품게시물의 댓글 조회
+// populate를 통해 댓글 작성자 정보와 상품 데이터 정보까지 모두 가져옴
 router.get('/products', (req, res) => {
     let productIds = req.query.id;
 
@@ -20,7 +20,8 @@ router.get('/products', (req, res) => {
 });
 
 // 댓글 작성 API
-// isLoggedIn 미들웨어로 로그인한 유저만 접근가능하게
+// isLoggedIn 미들웨어로 로그인한 유저에게만 접근 허용
+// body로 받아온 데이터 comment 인스턴스에 담아 저장
 router.post('/', isLoggedIn, (req, res) => {
 	// 받아온 정보 db에 저장
 	const comment = new Comment(req.body);
@@ -33,7 +34,8 @@ router.post('/', isLoggedIn, (req, res) => {
 });
 
 // 댓글 수정 API
-// queryString으로 해당 댓글 id를 가져와서 _id로 조회 후, .update, $set으로 수정함
+// queryString으로 해당 댓글 id를 가져와서 _id로 조회
+// body로 받아온 데이터, $set으로 수정
 router.put('/', isLoggedIn, (req, res) => {
 	Comment.update({ _id: req.query.id }, { $set: req.body }).exec(
 		(err, result) => {

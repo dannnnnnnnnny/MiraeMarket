@@ -4,7 +4,7 @@ const { Chat } = require('../models/Chat');
 const multer = require('multer');
 const { isLoggedIn } = require('./middlewares');
 
-// 전체 채팅 기록 조회,
+// 전체 채팅 기록 조회
 // populate를 통해서 sender 유저 정보까지 모두 가져옴 (SQL join한 것 처럼)
 router.get('/getChats', (req, res) => {
 	Chat.find()
@@ -25,10 +25,10 @@ var storage = multer.diskStorage({
 	},
 });
 
-// single을 통해 파일 하나를 받겠다 선언
+// single을 통해 파일 하나를 받는다고 선언함.
 var upload = multer({ storage: storage }).single('file');
 
-// isLoggedIn 미들웨어를 통해서 이미 로그인된 유저만 가능하게
+// isLoggedIn 미들웨어를 통해서 이미 로그인된 유저만 접근 가능하게 함
 // 이미지 업로드 기능 수행 API
 router.post('/uploadfiles', isLoggedIn, (req, res) => {
 	upload(req, res, (err) => {

@@ -104,16 +104,18 @@ function LandingPage() {
 		if (div === 'price') {
 			// 두 칸 다 빈칸이면
 			if (newFilters[div][0] === '' && newFilters[div][1] === '') {
-				newFilters[div] = [];
+				// newFilters[div] = [];
+				newFilters[div][0] = 0;
+				newFilters[div][1] = 5000000; 
+
 				// 첫칸이 빈칸이면 첫칸은 0원으로 처리
 			} else if (newFilters[div][0] === '') {
 				newFilters[div][0] = 0;
 				// 두번째 칸이 빈칸이면 Max값(500000)으로 처리
 			} else if (newFilters[div][1] === '') {
-				newFilters[div][1] = 500000;
+				newFilters[div][1] = 5000000;
 			}
 		}
-
 		showFilteredResults(newFilters);
 		setFilters(newFilters);
 	};
