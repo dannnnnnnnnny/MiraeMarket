@@ -14,7 +14,6 @@ export function ChatPage() {
 	const history = useHistory();
 
 	let server = 'http://localhost:5000';
-	// let server = window.location.hostname;
 	const socket = io(server);
 	// socketio 서버 추가
 

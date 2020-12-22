@@ -1,5 +1,5 @@
 const FBStrategy = require('passport-facebook').Strategy;
-const { FACEBOOK_ID, FACEBOOK_SECRET } = require('../config/dev');
+const { FACEBOOK_ID, FACEBOOK_SECRET } = require('../config/key');
 const { User } = require('../models/User');
 
 // 페이스북 소셜로그인 passport.js
@@ -15,12 +15,10 @@ module.exports = (passport) => {
 				clientID: FACEBOOK_ID,
 				clientSecret: FACEBOOK_SECRET,
 				callbackURL: 'http://localhost:5000/api/users/facebook/callback',
-				// callbackURL:
-				// 	'https://mirae-market.herokuapp.com/api/users/facebook/callback',
 			},
 			async (req, accessToken, refreshToken, profile, done) => {
 				try {
-					// 받아온 facebook profile을 통해 이미 존재하는 유저인지 확인
+					// 받아온 facebook profile을 통해 이미 존재하는 유저인지 findOne으로 찾음
 					const exUser = await User.findOne({
 						snsId: profile.id,
 						provider: 'facebook',

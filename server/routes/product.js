@@ -11,7 +11,7 @@ var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, 'uploads/');
 	},
-	// 파일 명
+	// 파일 명 (날짜_파일명)
 	filename: function (req, file, cb) {
 		cb(null, `${Date.now()}_${file.originalname}`);
 	},
@@ -19,9 +19,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single('file');
 
 // 이미지 저장 API
-// 파일경로, 파일이름을 리턴해서 상품 게시물 작성 API에 사용
+// 파일경로, 파일이름을 리턴해서 image 경로를 body에 같이 보냄
 router.post('/image', isLoggedIn, (req, res) => {
-	
 	upload(req, res, (err) => {
 		if (err) {
 			return res.json({ success: false, err });
@@ -46,14 +45,15 @@ router.post('/', isLoggedIn, (req, res) => {
 	});
 });
 
-// 상품 필터, 검색을 위한 API
-// product collections에 들어있는 모든 정보 가져옴
-// limit 은 한번에 가져올 데이터 갯수
-// skip은 몇번째 데이터부터 가져올지
+// 상품 필터, 검색을 위한 API & 전체 상품 조회 API (product collections에 들어있는 모든 정보 가져옴)
+// 글 작성 시간 역순으로 최신 게시물부터 보여짐
+// limit 은 한번에 가져올(load) 데이터 갯수
+// skip은 (몇개의 데이터를 스킵할지) 몇번째 데이터부터 가져올지
 // searching은 검색창에 입력한 검색 문자열
-// filters는 Object Type으로 가격과 카테고리로 구분됨.
+// filters는 Object Type으로 가격(price)키과 카테고리(category)키로 구분됨.
 // price(가격)이면 2개의 배열 (최소가격, 최대가격)이 추가되는데
 // 최소가격 이상 (gte), 최대가격 이하 (lte)로 찾기 위해서 처리해줌 (findArgs={'price': $gte: 1000, $lte: 20000})
+// 최대가격만 입력했을 때 최소가격의 default=0, 최소가격만 입력했을 때 최대가격 default=5000000
 // filters가 category면 그대로 저장 (findArgs = {'category': ['전공', '교양', ...]} )
 router.post('/products', (req, res) => {
 	let limit = req.body.limit ? parseInt(req.body.limit) : 12;
@@ -87,7 +87,6 @@ router.post('/products', (req, res) => {
 			.sort({ createdAt: -1 }) // 역정렬을 통해 최신데이터부터 보이도록 함.
 			.skip(skip)
 			.limit(limit)
-
 			.exec((err, productInfo) => {
 				if (err) {
 					return res.status(400).json({ success: false, err });
@@ -97,7 +96,7 @@ router.post('/products', (req, res) => {
 					.json({ success: true, productInfo, postSize: productInfo.length });
 			});
 	} else {
-		// 검색어 없이 filters 만 사용시
+		// 검색어 없이 filters 만 사용시 (기본 조회도 이 로직으로)
 		Product.find(findArgs)
 			.populate('writer')
 			.sort({ createdAt: -1 })
@@ -116,7 +115,7 @@ router.post('/products', (req, res) => {
 
 
 // 거래목록 조회 API
-// Redux store Cart의 거래목록 상품 id가 '123, 234, 345' string 타입으로 쿼리스트링으로 넘어옴
+// Redux store의 거래목록 상품 id가 '123, 234, 345' string 타입으로 쿼리스트링으로 넘어옴
 // split을 이용해서 ['123', '234', '345'] 리스트 형식으로 변환시켜줌
 // 리스트 형식의 상품ID로 해당 상품 정보들 검색
 router.get('/cart', (req, res) => {
@@ -149,7 +148,7 @@ router.get('/products', (req, res) => {
 });
 
 // 게시물 수정 API
-// id로 해당 상품 상세정보 찾은 후 $set에 body 데이터를 넣어 수정함
+// id로 해당 상품 상세정보 찾은 후 $set에 수정한 body 데이터를 넣어 업데이트함
 router.put('/products', (req, res) => {
 	Product.update({ _id: req.query.id }, { $set: req.body }).exec((err, result) => {
 		if (err) 
@@ -158,8 +157,8 @@ router.put('/products', (req, res) => {
 	});
 });
 
-// 해당 상품게시물 삭제API
-// 해당 게시물 id로 게시물 찾아서 지운 뒤, 게시물에 연결되어있는 image도 unlink로 삭제
+// 상품 게시물 삭제 API
+// 해당 게시물 id로 게시물 찾아서 지운 뒤, 게시물에 연결되어있는 저장된 image도 unlink로 삭제
 router.delete('/products', (req, res) => {
 	Product.findByIdAndRemove({ _id: req.query.id })
 		.exec((err, product) => {
@@ -175,8 +174,10 @@ router.delete('/products', (req, res) => {
 		});
 });
 
-// mypage API
-// 모든 상품 중 해당 글쓴이가 작성한 글을 모두 가져옴 (해당 유저 id를 쿼리스트링으로 조회)
+// 마이페이지 API
+// 모든 상품 중 해당 글쓴이가 작성한 글을 모두 가져옴 
+// (해당 유저 id를 쿼리스트링으로 조회) 
+// => 마이페이지뿐 아니라 다른 유저의 게시물이 필요할 때를 위해 (req.user가 아닌 req.query.id로)
 router.get('/mypage', (req, res) => [
 	Product.find({ writer: req.query.id })
 		.exec((err, Product) => {

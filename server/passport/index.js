@@ -5,7 +5,7 @@ const facebook = require('./facebookStrategy');
 const { User } = require('../models/User');
 
 // serializeUser
-// user 객체를 전달받아 세션(정확히는 req.session.passport.user)에 user.id 저장
+// user 객체를 전달받아 세션(정확히는 req.session)에 user.id 저장
 // req.session 객체에 어떤 데이터를 저장할지 선택함
 // done 두 번째 인자로 user.id 보내 저장함
 // (세션에 사용자 정보 객체를 아이디로 저장)

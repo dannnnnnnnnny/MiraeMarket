@@ -7,7 +7,6 @@ function UserCartBlock(props) {
 		if (images.length > 0) {
 			let image = images[0];
 			return `http://localhost:5000/${image}`;
-			// return `https://mirae-market.herokuapp.com/${image}`;
 		}
 	};
 	const renderItems = () =>
@@ -30,7 +29,7 @@ function UserCartBlock(props) {
 				</td>
 				<td>{product.price} 원</td>
 				<td>
-					<button onClick={() => props.removeItem(product._id)}>Remove</button>
+					<button onClick={() => props.removeItem(product._id)}>삭제</button>
 				</td>
 			</tr>
 		));

@@ -7,7 +7,7 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const { Product } = require('../models/Product');
 
 // 유저 인증 API
-// react, redux를 위해서 사용
+// react, redux를 위해서 사용 (페이지별로 접근 제어를 가능하게)
 // 해당 유저가 로그인 되어있는지 미들웨어로 확인 후
 // 로그인 되어 있다면
 // 유저의 id, 로그인여부, 이메일, 이름, 권한, 이미지, 전공, 거래목록, 전화번호 리턴
@@ -138,8 +138,6 @@ router.get('/kakao/callback', function (req, res, next) {
 	passport.authenticate('kakao', {
 		successRedirect: 'http://localhost:3000/login',
 		failureRedirect: 'http://localhost:3000/login',
-		// successRedirect: 'https://mirae-market.herokuapp.com',
-		// failureRedirect: 'https://mirae-market.herokuapp.com/login',
 	})(req, res, next);
 });
 
@@ -147,8 +145,6 @@ router.get('/facebook/callback', function (req, res, next) {
 	passport.authenticate('facebook', {
 		successRedirect: 'http://localhost:3000/login',
 		failureRedirect: 'http://localhost:3000/login',
-		// successRedirect: 'https://mirae-market.herokuapp.com',
-		// failureRedirect: 'https://mirae-market.herokuapp.com/login',
 	})(req, res, next);
 });
 
@@ -156,8 +152,6 @@ router.get('/naver/callback', function (req, res, next) {
 	passport.authenticate('naver', {
 		successRedirect: 'http://localhost:3000/login',
 		failureRedirect: 'http://localhost:3000/login',
-		// successRedirect: 'https://mirae-market.herokuapp.com',
-		// failureRedirect: 'https://mirae-market.herokuapp.com/login',
 	})(req, res, next);
 });
 
@@ -228,16 +222,16 @@ router.get('/removeFromCart', isLoggedIn, (req, res) => {
 		{
 			$pull: { cart: { id: req.query.id } },
 		},
-		{ new: true },
+		{ new: true },	// Update 후의 DB 정보를 가져올 수 있게 하는 옵션
 		(err, userInfo) => {
-			// 현재 유저의 거래목록 Object를 Array로 전처리해줌
-			// [{ id: "123"}] => ["123"]
+			// 현재 유저의 거래목록 Object에서 id 항목만 빼서 Array로 전처리해줌
+			// [{ id: "123"}, { id: "234" }] => ["123", "234"]
 			let cart = userInfo.cart;
 			let array = cart.map((item) => {
 				return item.id;
 			});
 
-			// product collection에서 현재 남아있는 상품 정보 가져오기
+			// product collection에서 현재 남아있는 상품 정보 가져오기 (Redux Store 업데이트를 위해서)
 			Product.find({ _id: array })
 				.populate('writer')
 				.exec((err, productInfo) => {
@@ -253,7 +247,7 @@ router.get('/removeFromCart', isLoggedIn, (req, res) => {
 // 타 유저 프로필 정보 확인용 API
 // 해당 유저 id를 통해 그 유저의 정보를 리턴받음
 router.get('/userInfo', (req, res) => {
-	User.findOne({ _id: req.query.id})
+	User.findOne({ _id: req.query.id })
 		.exec((err, user) => {
 			if(err) return res.send({ success: false, err })
 			return res.send({ success: true, user })

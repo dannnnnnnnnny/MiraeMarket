@@ -15,6 +15,11 @@ router.get('/getChats', (req, res) => {
 		});
 });
 
+
+
+
+/* 추후 Text 채팅이 아닌 image도 보내기 위한 설정 및 route  */
+
 // multer를 통해 destination 경로에 이미지 파일을 filename 명으로 지정해서 저장
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {

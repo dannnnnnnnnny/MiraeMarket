@@ -16,7 +16,7 @@ import NavBar from './views/NavBar';
 import Footer from './views/Footer';
 import OtherUserPage from './views/OtherUserPage';
 
-// High Order Component (hoc)
+// High Order Component 고차 컴포넌트 (hoc)
 // Auth hoc를 통해서 접근 제어
 // true : 로그인한 유저만 접근 허용
 // false : 미로그인 유저만 접근 허용
@@ -29,8 +29,6 @@ function App() {
 			<div
 				style={{
 					paddingTop: '69px',
-					// overflow: 'auto',
-					// maxeight: '900px',
 					minHeight: 'calc(100vh)',
 					// backgroundColor: '#23272a',
 				}}

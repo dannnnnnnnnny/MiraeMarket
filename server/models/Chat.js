@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // 채팅 모델
-// 추후 이미지도 송수신할 수 있게 할 예정
-
-// sender는 User의 ObjectId를 외래키처럼 넣어줌
+// 추후 이미지나 파일도 송수신할 수 있게 할 예정 (Type 필드를 둠)
+// sender는 User의 ObjectId를 외래키처럼 연결
 const chatSchema = mongoose.Schema(
 	{
 		message: {

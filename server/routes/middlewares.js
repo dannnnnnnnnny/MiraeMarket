@@ -5,7 +5,8 @@
 exports.isLoggedIn = (req, res, next) => {
 	// 로그인상태라면 그대로
 	if (req.isAuthenticated()) {
-		req.user = req.user;
+		req.user = req.user;	
+		// isLoggedIn 미들웨어를 통과한 router는 req.user로 유저 정보 사용 가능
 		next();
 	} else {
 		res.json({

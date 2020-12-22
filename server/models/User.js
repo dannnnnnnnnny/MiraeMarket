@@ -43,7 +43,7 @@ const userSchema = mongoose.Schema({
 	},
 });
 
-// user 데이터 save 이전에, bcrypt를 통해서 비밀번호를 해쉬함수로 암호화하는 로직
+// user 데이터 save 이전(pre)에, bcrypt 모듈을 통해서 비밀번호를 해쉬함수로 암호화하는 로직
 userSchema.pre('save', function (next) {
 	var user = this;
 
@@ -63,7 +63,7 @@ userSchema.pre('save', function (next) {
 });
 
 // 기존 비밀번호와 비교하는 로직
-// bcrypt는 두 패스워드를 해쉬함수를 통해 같은 해쉬를 가지는지 확인
+// bcrypt.compare는 두 패스워드를 해쉬함수를 통해 같은 해쉬를 가지는지 확인 (평문 password를 해쉬암호화하여 같은 해쉬값을 가지는지 체크)
 userSchema.methods.comparePassword = function (plainPassword, cb) {
 	bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
 		if (err) return cb(err);
