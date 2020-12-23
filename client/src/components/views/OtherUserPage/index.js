@@ -82,9 +82,6 @@ function OtherUserPage(props) {
 							icon={
 								<img
 									src={`http://localhost:5000/${user && user.image}`}
-									// src={`https://mirae-market.herokuapp.com/${
-									// 	user && user.image
-									// }`}
 									alt={user && user.image}
 								/>
 							}
@@ -92,7 +89,6 @@ function OtherUserPage(props) {
 					</div>
 					<div style={{ marginLeft: '60px' }}>
 						<Typography.Title level={2}>{user && user.name}</Typography.Title>
-						{/* <Typography.Title level={3}></Typography.Title> */}
 						<div style={{ display: 'flex', marginTop: '30px' }}>
 							<div>
 								<span style={{ fontWeight: 'lighter', fontSize: '18px' }}>
@@ -107,8 +103,6 @@ function OtherUserPage(props) {
 				</div>
 				<div
 					style={{
-						// margin: '100px 0 0 100px',
-						// width: '100%',
 						paddingTop: '100px',
 						paddingLeft: '100px',
 						paddingRight: '100px',
@@ -116,8 +110,6 @@ function OtherUserPage(props) {
 				>
 					<Row gutter={[16, 16]}>
 						{userProduct && renderUserProducts}
-						{/* {Mypost &&
-								Mypost.map((post) => <ProfilePost post={post} key={post.id} />)} */}
 					</Row>
 				</div>
 			</div>

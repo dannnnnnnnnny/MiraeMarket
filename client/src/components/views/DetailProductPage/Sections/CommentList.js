@@ -6,7 +6,6 @@ import {
 	notification,
 	Input,
 } from 'antd';
-// import moment from 'moment';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -146,7 +145,6 @@ function CommentList(props) {
 									avatar={
 										<Avatar
 											src={`http://localhost:5000/${comment.writer.image}`}
-											// src={`https://mirae-market.herokuapp.com/${comment.writer.image}`}
 										/>
 									}
 									title={

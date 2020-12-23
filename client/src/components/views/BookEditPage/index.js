@@ -137,7 +137,6 @@ function BookEditPage(props) {
 					<br />
 					<select
 						onChange={categoryChangeHandler}
-						// defaultValue={Product.category && Product.category}
 						value={Product.category && Product.category}
 					>
 						{Categories.map((item, index) => (

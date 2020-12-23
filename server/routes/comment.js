@@ -3,6 +3,7 @@ const router = express.Router();
 const { Comment } = require('../models/Comment');
 const { isLoggedIn } = require('./middlewares');
 
+// 댓글 조회 API
 // 해당 상품ID를 쿼리스트링을 통해 받아와서 해당 상품게시물의 댓글 조회
 // populate를 통해 댓글 작성자 정보와 상품 데이터 정보까지 모두 가져옴
 router.get('/products', (req, res) => {

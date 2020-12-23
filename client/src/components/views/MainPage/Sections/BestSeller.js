@@ -45,20 +45,13 @@ function BestSeller() {
 					2020년 12월 베스트셀러
 				</Title>
 				<Carousel
-					// swipeable={false}
-					// draggable={false}
 					responsive={responsive}
-					// ssr={true} // means to render carousel on server-side.
 					infinite={true}
 					autoPlay={true}
 					autoPlaySpeed={3000}
 					showDots={false}
-					// keyBoardControl={true}
-					// customTransition="all .5"
-					// centerMode={true}
 					focusOnSelect={true}
 					transitionDuration={500}
-					// containerClass="carousel-container-padding-40-px"
 					removeArrowOnDeviceType={['tablet', 'mobile']}
 					dotListClass="custom-dot-list-style"
 					trackClass="track"

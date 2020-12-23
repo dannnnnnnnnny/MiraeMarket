@@ -19,13 +19,13 @@ module.exports = (passport) => {
 			async (req, accessToken, refreshToken, profile, done) => {
 				try {
 					// 받아온 facebook profile을 통해 이미 존재하는 유저인지 findOne으로 찾음
-					const exUser = await User.findOne({
+					const socialUser = await User.findOne({
 						snsId: profile.id,
 						provider: 'facebook',
 					});
 					// 있으면 그냥 로그인 진행
-					if (exUser) {
-						done(null, exUser);
+					if (socialUser) {
+						done(null, socialUser);
 					} else {
 						// 없으면 회원가입 시킴
 						const newUser = new User({

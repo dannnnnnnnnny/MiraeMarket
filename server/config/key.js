@@ -1,4 +1,4 @@
-// mongoDB URI 및 소셜 로그인 데이터
+// mongoDB URI 및 소셜 로그인 데이터 관리
 module.exports = {
 	mongoURI:
 		'mongodb+srv://ehdgnl5249:kk5249@nodewebproj.ex5jz.mongodb.net/node?retryWrites=true&w=majority',

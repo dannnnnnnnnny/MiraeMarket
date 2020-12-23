@@ -78,7 +78,6 @@ function FileUpload(props) {
 							<img
 								style={{ width: '250px', height: '330px' }}
 								src={`http://localhost:5000/${image}`}
-								// src={`https://mirae-market.herokuapp.com/${image}`}
 								alt={`${image}_${idx}`}
 							/>
 						</div>

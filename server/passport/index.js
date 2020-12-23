@@ -5,13 +5,13 @@ const facebook = require('./facebookStrategy');
 const { User } = require('../models/User');
 
 // serializeUser
-// user 객체를 전달받아 세션(정확히는 req.session)에 user.id 저장
-// req.session 객체에 어떤 데이터를 저장할지 선택함
-// done 두 번째 인자로 user.id 보내 저장함
-// (세션에 사용자 정보 객체를 아이디로 저장)
+// user 객체를 전달받아 세션(정확히는 req.session)에 user.id 저장하는 역할
+// req.session 객체에 어떤 데이터를 저장할지 선택함 (user.id)
+// => done 두 번째 인자로 user.id 보내 저장함
+// (세션에 사용자 정보 객체 id 저장)
 
 // deserializeUser
-// deserializeUser은 실제 서버로 들어오는 요청마다 세션 정보(serializeUser에서 저장됨)를 실제 DB의 데이터와 비교
+// deserializeUser은 실제 서버로 들어오는 요청마다 세션 정보(serializeUser에서 저장된)를 실제 DB의 데이터와 비교
 // 매 요청시 passport.session() 미들웨어가 이 메서드를 호출함
 // serializeUser에서 세션에 저장했던 ID를 받아 DB에서 사용자 정보 조회
 // 조회한 정보를 req.user에 저장하여 앞으로

@@ -36,7 +36,6 @@ function MyPage() {
 						<Link to={`/product/${product._id}`}>
 							<img
 								src={`http://localhost:5000/${product.image[0]}`}
-								// src={`https://mirae-market.herokuapp.com/${product.image[0]}`}
 								alt={product.title}
 								style={{
 									width: '210px',
@@ -73,9 +72,6 @@ function MyPage() {
 										src={`http://localhost:5000/${
 											user.userData && user.userData.image
 										}`}
-										// src={`https://mirae-market.herokuapp.com/${
-										// 	user.userData && user.userData.image
-										// }`}
 										alt={user.userData && user.userData.image}
 									/>
 								}
@@ -85,7 +81,6 @@ function MyPage() {
 							<Typography.Title level={2}>
 								{user.userData && user.userData.name}
 							</Typography.Title>
-							{/* <Typography.Title level={3}></Typography.Title> */}
 							<div style={{ display: 'flex', marginTop: '30px' }}>
 								<div>
 									<span style={{ fontWeight: 'lighter', fontSize: '18px' }}>

@@ -10,7 +10,7 @@ const { Product } = require('../models/Product');
 // react, redux를 위해서 사용 (페이지별로 접근 제어를 가능하게)
 // 해당 유저가 로그인 되어있는지 미들웨어로 확인 후
 // 로그인 되어 있다면
-// 유저의 id, 로그인여부, 이메일, 이름, 권한, 이미지, 전공, 거래목록, 전화번호 리턴
+// 유저의 id, 로그인여부, 이메일, 이름, 권한, 이미지, 전공, 거래목록, 전화번호 리턴해서 redux store에 저장
 router.get('/auth', isLoggedIn, (req, res) => {
 	// console.log("auth: ",req.user)
 	res.status(200).json({
@@ -69,7 +69,7 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage }).single('file');
 
-// 프로필 저장 API
+// 프로필 이미지 저장 API
 router.post('/profileImage', (req, res) => {
 	upload(req, res, (err) => {
 		if (err) {
@@ -244,7 +244,7 @@ router.get('/removeFromCart', isLoggedIn, (req, res) => {
 	);
 });
 
-// 타 유저 프로필 정보 확인용 API
+// 유저 프로필 정보 확인용 API
 // 해당 유저 id를 통해 그 유저의 정보를 리턴받음
 router.get('/userInfo', (req, res) => {
 	User.findOne({ _id: req.query.id })

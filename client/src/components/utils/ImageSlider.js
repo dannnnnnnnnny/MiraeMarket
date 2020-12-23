@@ -21,7 +21,6 @@ function ImageSlider(props) {
 									objectFit: 'cover',
 								}}
 								src={`http://localhost:5000/${image}`}
-								// src={`https://mirae-market.herokuapp.com/${image}`}
 								alt={`product_${image}`}
 							/>
 						</div>

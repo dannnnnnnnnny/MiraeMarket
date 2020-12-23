@@ -59,7 +59,6 @@ export function auth() {
 export function logoutUser() {
 	const request = axios
 		.get(`http://localhost:3000/api/users/logout`)
-		// .get(`https://mirae-market.herokuapp.com/api/users/logout`)
 		.then((response) => response.data);
 
 	return {

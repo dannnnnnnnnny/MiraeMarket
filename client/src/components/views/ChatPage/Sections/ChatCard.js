@@ -42,7 +42,6 @@ function ChatCard(props) {
 							src={
 								props.chat.sender &&
 								`http://localhost:5000/${props.chat.sender.image}`
-								// `https://mirae-market.herokuapp.com/${props.chat.sender.image}`
 							}
 							alt={props.chat.sender && props.chat.sender.name}
 						/>

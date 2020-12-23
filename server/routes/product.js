@@ -7,15 +7,14 @@ const fs = require('fs');
 
 // multer를 통한 이미지 저장 (저장 위치, 파일명으로 uploads/ 경로에 이미지 저장)
 var storage = multer.diskStorage({
-	// 저장 위치
-	destination: function (req, file, cb) {
+	destination: function (req, file, cb) {	// 저장 위치
 		cb(null, 'uploads/');
 	},
-	// 파일 명 (날짜_파일명)
-	filename: function (req, file, cb) {
+	filename: function (req, file, cb) {	// 파일 명 (날짜_파일명)
 		cb(null, `${Date.now()}_${file.originalname}`);
 	},
 });
+
 var upload = multer({ storage: storage }).single('file');
 
 // 이미지 저장 API
@@ -46,15 +45,17 @@ router.post('/', isLoggedIn, (req, res) => {
 });
 
 // 상품 필터, 검색을 위한 API & 전체 상품 조회 API (product collections에 들어있는 모든 정보 가져옴)
-// 글 작성 시간 역순으로 최신 게시물부터 보여짐
-// limit 은 한번에 가져올(load) 데이터 갯수
-// skip은 (몇개의 데이터를 스킵할지) 몇번째 데이터부터 가져올지
-// searching은 검색창에 입력한 검색 문자열
-// filters는 Object Type으로 가격(price)키과 카테고리(category)키로 구분됨.
-// price(가격)이면 2개의 배열 (최소가격, 최대가격)이 추가되는데
-// 최소가격 이상 (gte), 최대가격 이하 (lte)로 찾기 위해서 처리해줌 (findArgs={'price': $gte: 1000, $lte: 20000})
-// 최대가격만 입력했을 때 최소가격의 default=0, 최소가격만 입력했을 때 최대가격 default=5000000
-// filters가 category면 그대로 저장 (findArgs = {'category': ['전공', '교양', ...]} )
+/*
+	글 작성 시간 역순으로 최신 게시물부터 보여짐
+	limit 은 한번에 가져올(load) 데이터 갯수
+	skip은 (몇개의 데이터를 스킵할지) 몇번째 데이터부터 가져올지
+	searching은 검색창에 입력한 검색 문자열
+	filters는 Object Type으로 가격(price)키과 카테고리(category)키로 구분됨.
+	price(가격)이면 2개의 배열 (최소가격, 최대가격)이 추가되는데
+	최소가격 이상 (gte), 최대가격 이하 (lte)로 찾기 위해서 처리해줌 (findArgs={'price': $gte: 1000, $lte: 20000})
+	최대가격만 입력했을 때 최소가격의 default=0, 최소가격만 입력했을 때 최대가격 default=5000000
+	filters가 category면 그대로 저장 (findArgs = {'category': ['전공', '교양', ...]} )
+*/
 router.post('/products', (req, res) => {
 	let limit = req.body.limit ? parseInt(req.body.limit) : 12;
 	let skip = req.body.skip ? parseInt(req.body.skip) : 0;
@@ -73,7 +74,6 @@ router.post('/products', (req, res) => {
 			}
 		}
 	}
-
 	// 검색 문자열이 있으면 정규식을 통해서 대소문자 구별없이(i) 제목과 설명에서 $or을 통해 상품을 찾음
 	if (searching) {
 		Product.find(findArgs)
@@ -96,7 +96,7 @@ router.post('/products', (req, res) => {
 					.json({ success: true, productInfo, postSize: productInfo.length });
 			});
 	} else {
-		// 검색어 없이 filters 만 사용시 (기본 조회도 이 로직으로)
+		// 검색어 없이 filters 만 사용시 (기본 전체 조회도 이 로직으로)
 		Product.find(findArgs)
 			.populate('writer')
 			.sort({ createdAt: -1 })
@@ -147,6 +147,7 @@ router.get('/products', (req, res) => {
 		});
 });
 
+
 // 게시물 수정 API
 // id로 해당 상품 상세정보 찾은 후 $set에 수정한 body 데이터를 넣어 업데이트함
 router.put('/products', (req, res) => {
@@ -157,7 +158,7 @@ router.put('/products', (req, res) => {
 	});
 });
 
-// 상품 게시물 삭제 API
+// 게시물 삭제 API
 // 해당 게시물 id로 게시물 찾아서 지운 뒤, 게시물에 연결되어있는 저장된 image도 unlink로 삭제
 router.delete('/products', (req, res) => {
 	Product.findByIdAndRemove({ _id: req.query.id })
